@@ -62,7 +62,7 @@
 % ==================== 基本信息 ====================
 \title[AI多任务资源调度系统]{面向AI多任务场景的资源调度系统\\设计与实现}
 \subtitle{Design and Implementation of Resource Scheduling System\\for AI Multi-task Scenarios}
-\author[答辩人]{\\ 答辩人：XXX \\ 导\quad 师：XXX}
+\author[谢博谦]{谢博谦}
 \institute[USTC]{中国科学技术大学 \\ 软件学院}
 \date{\today}
 
@@ -70,10 +70,26 @@
 \begin{document}
 
 % ============================================
-% 第1页 · 封面
+% 第1页 · 封面（含USTC校徽）
 % ============================================
 \begin{frame}[plain]
-  \titlepage
+  \begin{center}
+    \vspace{0.3cm}
+    \includegraphics[height=2.5cm]{../paper_latex/figures/ustc-badge.pdf}\\[0.5cm]
+    {\LARGE\color{ustcblue} 中国科学技术大学}\\[0.5cm]
+    {\Large\color{ustcblue}\textbf{面向AI多任务场景的资源调度系统}}\\[0.3cm]
+    {\Large\color{ustcblue}\textbf{设计与实现}}\\[0.4cm]
+    {\small Design and Implementation of Resource Scheduling System\\ for AI Multi-task Scenarios}\\[0.4cm]
+    \begin{tabular}{rl}
+      \textbf{答辩人：} & 谢博谦 \\
+      \textbf{学\quad 号：} & SA23225380 \\
+      \textbf{专\quad 业：} & 软件工程 \\
+      \textbf{校内导师：} & 赵功名\quad 副教授 \\
+      \textbf{实践导师：} & 张钟\quad 高级工程师 \\
+    \end{tabular}
+    \vspace{1cm}
+    {\small \today}
+  \end{center}
 \end{frame}
 
 % ============================================
@@ -94,17 +110,14 @@
     人工智能大模型在NLP、CV、智能决策等领域广泛应用，\textbf{多任务调度需求呈爆发式增长}。
   \end{block}
 
-  \pause
   \begin{alertblock}{矛盾一：AI特性适配性差}
     传统调度系统无法有效处理AI任务的\textbf{异构参数}与\textbf{非结构化数据}，数据治理繁杂。
   \end{alertblock}
 
-  \pause
   \begin{alertblock}{矛盾二：决策过度依赖人工}
     系统\textbf{无法自动判断}海量AI任务是否具备执行条件，依赖人工逐一启动，浪费人力资源。
   \end{alertblock}
 
-  \pause
   \begin{alertblock}{矛盾三：缺乏资源互斥检测}
     无法识别GPU等AI临界资源的互斥冲突，任务只能\textbf{低效串行}执行，计算资源严重浪费。
   \end{alertblock}
@@ -191,7 +204,6 @@
     \end{itemize}
   \end{block}
 
-  \pause
   \begin{block}{资源互斥检测 — 传统互斥算法}
     \begin{itemize}
       \item Dekker → Peterson → Lamport时间戳
@@ -200,7 +212,6 @@
     \end{itemize}
   \end{block}
 
-  \pause
   \begin{exampleblock}{结论}
     现有技术体系在AI多任务场景下全面失效，亟需全新设计方案。
   \end{exampleblock}
@@ -423,7 +434,6 @@
     传统调度系统仅支持结构化数据，无法处理AI任务的\textbf{异构、非结构化参数}，频繁导致任务失败。
   \end{alertblock}
 
-  \pause
   \begin{exampleblock}{解决方案}
     \textbf{建立大模型任务参数画像 + Pydantic自动纠偏}
     \begin{enumerate}
@@ -482,7 +492,6 @@
     海量AI任务需\textbf{人工逐一判断}是否可执行，浪费人力且效率低下。
   \end{alertblock}
 
-  \pause
   \begin{exampleblock}{解决方案}
     \textbf{构建"条件-规则"二级嵌套逻辑引擎}
     \begin{columns}[T]
@@ -504,10 +513,38 @@
     \end{columns}
   \end{exampleblock}
 
-  \pause
   \begin{center}
     \textbf{核心转变：} 从"人工经验驱动" $\longrightarrow$ "引擎自决"
   \end{center}
+\end{frame}
+
+% 第14.5页 · 创新二（核心公式）
+\begin{frame}{创新二：逻辑引擎的形式化定义}
+  \begin{block}{条件算子（Condition）}
+    逻辑判定的最小原子单元，映射关系：
+    \[
+    C = \{Code, Params\} \rightarrow f_{\text{logic}}(Env, Params)
+    \]
+    \begin{itemize}
+      \footnotesize
+      \item $Code$：唯一标识底层判断逻辑（如时间范围、负载阈值）
+      \item $Params$：运行时参数，赋予同一逻辑适配不同场景的灵活性
+      \item $Env$：实时采集的内外部环境状态
+    \end{itemize}
+  \end{block}
+
+  \begin{block}{规则算子（Rule）}
+    原子条件经逻辑算子嵌套组合而成：
+    \[
+    Rule = \bigvee_{i=1}^{n} \left( \bigwedge_{j=1}^{m} Condition_{i,j} \right)
+    \]
+    \begin{itemize}
+      \footnotesize
+      \item 一级数组元素间执行\textbf{"或（OR）"}逻辑
+      \item 二级数组元素间执行\textbf{"且（AND）"}逻辑
+      \item 支持"场景策略注入"：节假日、封网期间自动调整准入规则
+    \end{itemize}
+  \end{block}
 \end{frame}
 
 % 第15页 · 创新二（效果）
@@ -543,21 +580,33 @@
     GPU等AI临界资源存在互斥冲突，传统调度方案只能\textbf{保守串行执行}，资源利用率低。
   \end{alertblock}
 
-  \pause
   \begin{exampleblock}{解决方案}
     \textbf{细粒度"临界资源表" + 互斥智能检测}
     \begin{enumerate}
-      \item \textbf{资源拓扑建模}：标注GPU、显存等独占性资源的拓扑关系
-      \item \textbf{互斥检测算法}：精准识别任务间的资源冲突，动态判定并发可行性
-      \item \textbf{权重轮询负载均衡}：对无冲突任务进行动态分流，安全并发
+      \item \textbf{资源注册}：任务需在定义阶段声明所需临界资源清单
+      \item \textbf{状态探测}：实时扫描资源占用表，检测 is\_delete 标识
+      \item \textbf{并发决策}：无冲突$\rightarrow$并发执行；有冲突$\rightarrow$延迟重试
     \end{enumerate}
   \end{exampleblock}
 
-  \pause
+  \vspace{0.2cm}
   \begin{center}
-    \textbf{资源互斥判断：}同一GPU上的多个推理任务 → 自动检测$\rightarrow$串行排队 \\
-    \qquad\qquad\qquad\ 不同GPU上的独立任务 → 自动检测$\rightarrow$并发执行
+    \small
+    资源占用表：\textit{task\_id} + \textit{resource\_id} + \textit{is\_delete} $\longrightarrow$ 实时快照
   \end{center}
+
+  \vspace{0.2cm}
+  \begin{columns}[T]
+    \column{0.48\textwidth}
+    \begin{block}{冲突场景}
+      同一GPU\#1上多个推理任务$\rightarrow$\textbf{串行排队}
+    \end{block}
+
+    \column{0.48\textwidth}
+    \begin{block}{无冲突场景}
+      不同GPU\#1/\#2上独立任务$\rightarrow$\textbf{安全并发}
+    \end{block}
+  \end{columns}
 \end{frame}
 
 % 第17页 · 创新三（效果）
@@ -640,35 +689,67 @@
 % 第19页 · 测试环境与方法
 \begin{frame}{测试环境与方法}
   \begin{columns}[T]
-    \column{0.45\textwidth}
-    \begin{block}{测试环境}
-      \begin{itemize}
-        \item 腾讯TEG生产环境
-        \item Docker + Kubernetes集群
-        \item PostgreSQL + Redis
-      \end{itemize}
+    \column{0.55\textwidth}
+    \begin{block}{测试环境（腾讯TEG生产环境）}
+      \begin{table}
+        \rowcolors{2}{ustcblue!5}{white}
+        \begin{tabular}{|l|c|}
+          \hline
+          \rowcolor{ustcblue!30}
+          \textbf{配置项} & \textbf{规格} \\
+          \hline
+          K8s集群 & 3节点（1M + 2W）\\
+          \hline
+          K8s版本 & TKE 1.28.0 \\
+          \hline
+          数据库 & PostgreSQL + Redis \\
+          \hline
+          监控 & Grafana 可视化 \\
+          \hline
+          兼容性测试 & CentOS/Debian/Win \\
+          \hline
+        \end{tabular}
+      \end{table}
     \end{block}
 
-    \column{0.55\textwidth}
-    \begin{block}{测试工具与维度}
+    \column{0.45\textwidth}
+    \begin{block}{开发环境}
       \begin{itemize}
-        \item \textbf{功能测试}：Postman
-        \item \textbf{性能压测}：Hey (Golang)
-        \item \textbf{监控告警}：Grafana
-        \item \textbf{CI/CD}：腾讯智研平台
+        \item CPU: i9-13900K @ 3.0GHz
+        \item 内存: 64GB DDR5 5600MHz
+        \item GPU: RTX 4090 (24GB)
       \end{itemize}
     \end{block}
   \end{columns}
 
   \vspace{0.3cm}
-  \begin{center}
-    \begin{tikzpicture}
-      \foreach \i/\t in {0/功能测试, 2/性能测试, 4/稳定性测试, 6/兼容性测试} {
-        \node[rectangle, draw=ustcblue, fill=ustcblue!10, minimum width=1.8cm, minimum height=0.7cm, font=\small] at (\i,0) {\t};
-      }
-      \draw[->, thick, ustcgray] (-1.2,0) -- (-0.8,0);
-    \end{tikzpicture}
-  \end{center}
+  \begin{block}{测试工具与维度}
+    \begin{columns}[T]
+      \column{0.25\textwidth}
+      \begin{center}
+        \textbf{功能测试}\\[2pt]
+        \footnotesize Postman
+      \end{center}
+
+      \column{0.25\textwidth}
+      \begin{center}
+        \textbf{性能压测}\\[2pt]
+        \footnotesize Hey (Golang)
+      \end{center}
+
+      \column{0.25\textwidth}
+      \begin{center}
+        \textbf{监控告警}\\[2pt]
+        \footnotesize Grafana
+      \end{center}
+
+      \column{0.25\textwidth}
+      \begin{center}
+        \textbf{自动化CI/CD}\\[2pt]
+        \footnotesize 腾讯智研
+      \end{center}
+    \end{columns}
+  \end{block}
 \end{frame}
 
 % 第20页 · 功能测试结果
@@ -681,63 +762,83 @@
         \rowcolor{ustcblue!30}
         \textbf{测试层级} & \textbf{测试用例数} & \textbf{通过率} & \textbf{结论} \\
         \hline
-        API接入层 & 任务CRUD、权限、纠错 & \textcolor{green!60!black}{\textbf{100\%}} & 通过 \\
+        API接入层 & 12项（纠错8项+权限等4项） & \textcolor{green!60!black}{\textbf{100\%}} & 通过 \\
         \hline
-        任务调度层 & 可用性检测、负载均衡、容错 & \textcolor{green!60!black}{\textbf{100\%}} & 通过 \\
+        任务调度层 & 19项（可用性8项+资源8项+其他3项） & \textcolor{green!60!black}{\textbf{100\%}} & 通过 \\
         \hline
-        任务执行层 & 参数传递、编辑、异常捕获 & \textcolor{green!60!black}{\textbf{100\%}} & 通过 \\
+        任务执行层 & 20项（参数8项+编辑4项+异常8项） & \textcolor{green!60!black}{\textbf{100\%}} & 通过 \\
         \hline
       \end{tabular}
     \end{table}
   \end{center}
 
-  \begin{exampleblock}{结论}
-    三层架构下全部功能测试100\%通过，验证了分层解耦架构在复杂业务逻辑下的正确性。
-  \end{exampleblock}
+  \vspace{0.2cm}
+  \begin{columns}[T]
+    \column{0.32\textwidth}
+    \begin{block}{API接入层}
+      \footnotesize
+      全角纠偏、冗余清理、类型推断、权限拦截
+    \end{block}
+
+    \column{0.35\textwidth}
+    \begin{block}{任务调度层}
+      \footnotesize
+      负载检测、互斥判定、等待唤醒、容错恢复
+    \end{block}
+
+    \column{0.33\textwidth}
+    \begin{block}{任务执行层}
+      \footnotesize
+      参数传递、撤销重启、指标监测、异常上报
+    \end{block}
+  \end{columns}
 \end{frame}
 
 % 第21页 · 性能测试结果
-\begin{frame}{性能测试结果（压测数据）}
+\begin{frame}{性能测试结果（Hey压测数据）}
   \begin{columns}[T]
-    \column{0.45\textwidth}
+    \column{0.52\textwidth}
     \begin{center}
       \begin{table}
         \rowcolors{2}{ustcblue!5}{white}
-        \begin{tabular}{|c|c|}
+        \begin{tabular}{|c|c|c|c|}
           \hline
           \rowcolor{ustcblue!30}
-          \textbf{并发数} & \textbf{平均响应} \\
+          \textbf{并发数} & \textbf{提交} & \textbf{删除} & \textbf{编辑} \\
           \hline
-          10 & \textcolor{green!60!black}{< 14ms} \\
+          10 & \textcolor{green!60!black}{14ms} & \textcolor{green!60!black}{11ms} & \textcolor{green!60!black}{13ms} \\
           \hline
-          100 & \textcolor{green!60!black}{< 32ms} \\
+          100 & \textcolor{green!60!black}{32ms} & \textcolor{green!60!black}{28ms} & \textcolor{green!60!black}{30ms} \\
           \hline
-          1000 & \textcolor{green!60!black}{< 168ms} \\
+          1000 & \textcolor{green!60!black}{168ms} & \textcolor{green!60!black}{145ms} & \textcolor{green!60!black}{152ms} \\
           \hline
         \end{tabular}
       \end{table}
     \end{center}
 
-    \column{0.55\textwidth}
-    \begin{tikzpicture}[scale=0.9]
-      % Simple bar chart
-      \draw[->] (0,0) -- (0,4.5) node[left] {ms};
-      \draw[->] (0,0) -- (5.5,0) node[below] {并发数};
+    \column{0.48\textwidth}
+    \begin{tikzpicture}[scale=0.85]
+      % Bar chart with comparison
+      \draw[->] (0,0) -- (0,4.2) node[left] {ms};
+      \draw[->] (0,0) -- (6,0) node[below] {并发数};
 
       \foreach \x/\h/\v in {1/0.8/14, 2.5/1.8/32, 4/3.2/168} {
-        \fill[ustcblue!70] (\x-0.25,0) rectangle (\x+0.25,\h);
-        \node[font=\footnotesize] at (\x,\h+0.25) {\v};
+        \fill[ustcblue!70] (\x-0.2,0) rectangle (\x+0.2,\h);
+        \node[font=\footnotesize] at (\x,\h+0.2) {\v};
       }
       \node[font=\footnotesize] at (1,-0.5) {10};
       \node[font=\footnotesize] at (2.5,-0.5) {100};
       \node[font=\footnotesize] at (4,-0.5) {1000};
+
+      % Expected threshold line
+      \draw[dashed, red!60, thick] (0,3.5) -- (6.5,3.5) node[right,font=\tiny] {阈值500ms};
     \end{tikzpicture}
   \end{columns}
 
-  \vspace{0.2cm}
-  \begin{center}
-    \textbf{1000并发下仍保持 <168ms 的低延迟响应，满足工业级性能要求}
-  \end{center}
+  \vspace{0.15cm}
+  \begin{exampleblock}{结论}
+    全部压测项远低于预设阈值（500ms），工具：\textbf{Hey (Golang)}
+  \end{exampleblock}
 \end{frame}
 
 % 第22页 · 稳定性 & 兼容性测试
@@ -745,31 +846,52 @@
   \begin{columns}[T]
     \column{0.48\textwidth}
     \begin{block}{稳定性测试 — 全部100\%通过}
-      \begin{itemize}
-        \item 关机重启后自动恢复
-        \item 断电故障数据不丢失
-        \item 网络中断自动重连
-        \item 多任务并发压力稳定
-        \item 磁盘空间满优雅降级
-      \end{itemize}
+      \begin{table}
+        \rowcolors{2}{ustcblue!5}{white}
+        \begin{tabular}{|l|c|}
+          \hline
+          \rowcolor{ustcblue!30}
+          \textbf{场景} & \textbf{结果} \\
+          \hline
+          关机重启 & 自动恢复，数据无丢失 \\
+          \hline
+          断电故障 & 继续未完成任务 \\
+          \hline
+          网络中断 & 自动重连，任务继续 \\
+          \hline
+          多任务并发 & 无冲突，结果正确 \\
+          \hline
+          磁盘空间满 & 提示不足，优雅降级 \\
+          \hline
+        \end{tabular}
+      \end{table}
     \end{block}
 
     \column{0.48\textwidth}
     \begin{block}{兼容性测试 — 全部100\%通过}
-      \begin{itemize}
-        \item \textbf{Linux} x86-64
-        \item \textbf{Linux} ARM64
-        \item \textbf{Windows} x86-64
-        \item \textbf{Windows} ARM64
-      \end{itemize}
-      \vspace{0.3cm}
-      全平台\ 全架构覆盖
+      \begin{table}
+        \rowcolors{2}{ustcblue!5}{white}
+        \begin{tabular}{|l|c|}
+          \hline
+          \rowcolor{ustcblue!30}
+          \textbf{环境} & \textbf{结果} \\
+          \hline
+          Linux x86-64 & 稳定无报错 \\
+          \hline
+          Linux ARM64 & 稳定无报错 \\
+          \hline
+          Windows x86-64 & 稳定无报错 \\
+          \hline
+          Windows ARM64 & 稳定无报错 \\
+          \hline
+        \end{tabular}
+      \end{table}
     \end{block}
   \end{columns}
 
-  \vspace{0.3cm}
+  \vspace{0.2cm}
   \begin{exampleblock}{容错机制}
-    系统采用\textbf{指数退避自愈策略}：故障自动检测 → 递增等待间隔重试 → 超限告警通知运维。
+    系统采用\textbf{指数退避自愈策略}：故障检测 $\rightarrow$ $2^{n-1}$秒递增重试 $\rightarrow$ 超限告警。
   \end{exampleblock}
 \end{frame}
 
@@ -787,21 +909,18 @@
       \item 显著降低操作复杂度与数据处理门槛
     \end{itemize}
 
-    \pause
     \item \textbf{突破决策自动化瓶颈}
     \begin{itemize}
       \item 环境感知逻辑引擎，"条件-规则"模型
       \item 消除人工干预，实现7×24小时自动调度
     \end{itemize}
 
-    \pause
     \item \textbf{解决资源互斥困境}
     \begin{itemize}
       \item 细粒度临界资源表 + 互斥智能检测
       \item 从低效串行 → 安全高效并发调度
     \end{itemize}
 
-    \pause
     \item \textbf{完成工程验证}
     \begin{itemize}
       \item 腾讯TEG生产环境全面测试，月稳定支撑约200个AI任务
@@ -892,33 +1011,58 @@
   \end{center}
 \end{frame}
 
-% A.2 任务状态机
-\begin{frame}{附录A.2：任务状态机}
+% A.2 任务状态机（9状态详细版）
+\begin{frame}{附录A.2：任务全生命周期状态机}
   \begin{center}
+    \resizebox{0.9\textwidth}{!}{
     \begin{tikzpicture}[
-      state/.style={circle, draw=ustcblue, fill=ustcblue!10, minimum width=1.5cm, font=\small},
+      state/.style={rectangle, draw=ustcblue, fill=ustcblue!10, minimum width=1.8cm, minimum height=0.6cm, rounded corners=3pt, font=\small},
       arrow/.style={->, thick, ustcblue},
+      term/.style={rectangle, draw=green!60!black, fill=green!10, minimum width=1.5cm, minimum height=0.6cm, rounded corners=3pt, font=\small},
     ]
 
-    \node[state] (pending) at (0,0) {待执行};
-    \node[state] (check) at (3,0) {可用性检测};
-    \node[state] (queued) at (6,1.5) {排队中};
-    \node[state] (running) at (9,0) {执行中};
-    \node[state] (success) at (12,0) {成功};
-    \node[state] (failed) at (9,-2) {失败};
-    \node[state] (retry) at (6,-2) {重试};
+    % 第一行：准入阶段
+    \node[state] (waiting) at (0,2) {\footnotesize WAITING};
+    \node[state] (suspend) at (0,-1.5) {\footnotesize SUSPEND};
+    \node[state] (sent) at (3.5,2) {\footnotesize SENT};
 
-    \draw[arrow] (pending) -- (check);
-    \draw[arrow] (check) -- (queued) node[midway,above] {通过};
-    \draw[arrow] (queued) -- (running);
-    \draw[arrow] (running) -- (success) node[midway,above] {完成};
-    \draw[arrow] (running) -- (failed) node[midway,right] {异常};
-    \draw[arrow] (failed) -- (retry);
-    \draw[arrow,bend left] (retry) to (queued);
+    % 第二行：执行阶段
+    \node[state] (pending) at (7,2) {\footnotesize PENDING};
+    \node[state] (started) at (10.5,2) {\footnotesize STARTED};
+    \node[state] (progress) at (10.5,0) {\footnotesize PROGRESS};
 
-    \node[font=\footnotesize,ustcgray] at (3,-1.5) {不通过则等待/拒绝};
+    % 第三行：终态
+    \node[term] (success) at (13.5,2) {\footnotesize SUCCESS};
+    \node[term] (failure) at (13.5,-1.5) {\footnotesize FAILURE};
+    \node[term] (revoked) at (3.5,-1.5) {\footnotesize REVOKED};
 
+    % 迁移箭头
+    \draw[arrow] (waiting) -- (sent) node[midway,above] {\tiny 引擎准入};
+
+    \draw[arrow] (waiting) -- (suspend) node[midway,left] {\tiny 手动挂起};
+    \draw[arrow, bend left=20] (suspend) to (waiting) node[midway,above,sloped] {\tiny 手动恢复};
+
+    \draw[arrow] (sent) -- (pending) node[midway,above] {\tiny 入队};
+    \draw[arrow] (pending) -- (started) node[midway,above] {\tiny 拾取};
+    \draw[arrow] (started) -- (progress) node[midway,right] {\tiny 上报进度};
+
+    \draw[arrow] (progress) -- (success) node[midway,above] {\tiny 完成};
+    \draw[arrow] (started) -- (failure) node[midway,left,sloped] {\tiny 异常};
+    \draw[arrow] (progress) -- (failure) node[midway,right,sloped] {\tiny 异常};
+
+    \draw[arrow] (sent) -- (revoked);
+    \draw[arrow] (pending) -- (revoked);
+    \draw[arrow] (started) -- (revoked);
+    \draw[arrow] (waiting) -- (revoked);
+
+    \draw[arrow, bend right] (failure) to (pending) node[midway,above,sloped] {\tiny 重试};
+
+    % 阶段标注
+    \node[font=\footnotesize,ustcgray] at (1.8,3.2) {准入阶段};
+    \node[font=\footnotesize,ustcgray] at (8.8,3.2) {执行阶段};
+    \node[font=\footnotesize,ustcgray] at (13.5,3.2) {终态};
   \end{tikzpicture}
+  }
   \end{center}
 \end{frame}
 
