@@ -1,0 +1,59 @@
+% !TeX encoding = UTF-8
+% !TeX program = xelatex
+% !TeX spellcheck = en_US
+
+\documentclass[degree=master, degree-type=professional]{ustcthesis}
+% degree      = doctor | master | bachelor
+% degree-type = academic | professional | engineering
+% language    = chinese | english
+% fontset     = windows | mac | ubuntu | fandol
+
+% 加载宏包、全部的配置
+\input{ustcsetup}
+
+\setlist[enumerate]{
+    label=（\arabic*）,  % 建议使用中文全角括号“（1）”，更符合中文论文排版规范。若强求半角可写为 (\arabic*)
+    leftmargin=0pt,    % 关键设置：使后续的行不再缩进（直接顶格对齐）
+    labelindent=2em,   % 序号的起始位置缩进 2 个中文字符（与普通段落首行缩进一致）
+    itemindent=*,      % 自动计算首行文本的缩进（基于 labelindent + 序号宽度 + labelsep）
+    listparindent=2em, % 如果同一个列表项内包含多个段落，让第二段及以后的段落也保持首行缩进
+    labelsep=0em     % 序号与正文文字之间的间距
+}
+
+\usepackage{tabularx}
+
+\begin{document}
+
+\maketitle
+\copyrightpage
+
+\frontmatter
+% \include{chapters/innovations}  % 博士学位论文的创新性说明
+\include{chapters/abstract}
+\tableofcontents
+% \listoffigures
+% \listoftables
+\listoffiguresandtables
+% \include{chapters/notation}
+
+\mainmatter
+
+\include{chapters/1}
+\include{chapters/2}
+\include{chapters/3}
+\include{chapters/4}
+\include{chapters/5}
+\include{chapters/6}
+\include{chapters/7}
+
+\bibliography{bib/ustc}  % 参考文献使用 BibTeX 编译
+% \printbibliography       % 参考文献使用 BibLaTeX 编译
+
+\appendix
+% \include{chapters/complementary}
+
+\backmatter
+\include{chapters/acknowledgements}
+% \include{chapters/achievements}
+
+\end{document}

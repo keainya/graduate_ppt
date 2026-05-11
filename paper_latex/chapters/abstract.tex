@@ -1,0 +1,26 @@
+% !TeX root = ../main.tex
+
+\ustcsetup{
+  keywords  = {人工智能大模型\  任务调度\  自动化决策\ 资源互斥},
+  keywords* = {AI Large Model, Task Scheduling, Automated Decision-Making, Resource Mutual Exclusion},
+}
+
+\begin{abstract}
+
+作为一项前沿应用技术，人工智能大模型已在自然语言处理、计算机视觉、智能决策等众多领域得到广泛应用，显著提升了各行业的生产效率与智能化水平。在实际生产中，开发人员往往需要编排涉及不同模型、不同算力需求的复杂多任务流，以完成批量推理、自动化测试及数据采集等工作。然而随着相关技术的发展与广泛应用，传统的人工执行或基于简单脚本的任务调度模式已难以应对多任务场景下复杂的资源依赖拓扑及高密度的调度需求，暴露出以下问题：其一，现有技术对AI相关特性适配不佳，多任务场景下的参数处理与数据治理繁杂；其二，系统无法自主判断海量AI任务是否具备执行条件，依赖人工启动，浪费人力资源；其三，无法识别AI多任务场景下的资源互斥情况，只能低效串行启动任务。这些瓶颈已成为技术演进的阻碍，相关行业亟需一套能够精准管控多任务并发、具备智能决策能力的AI多任务资源调度系统。
+
+针对当前调度模式与AI多任务场景特征失配的现状，本文设计并实现了一套面向AI多任务场景的资源调度系统。系统采用由API接入层、任务调度层与任务执行层构成的分层解耦架构，通过各层间的标准化接口确保了系统的高效流转与扩展性。首先，API接入层与任务执行层通过建立AI任务参数画像与异构数据映射机制，实现了对复杂参数的深度适配，有效提升了系统在复杂参数条件下的数据自动纠错效率与类型推断准确率；其次，任务调度层引入了具备环境感知能力的任务可用性检测机制，通过构建自动化决策引擎，实时感知系统负载与运营策略，从而彻底消除了海量任务下发过程中对人工干预的依赖；最后，针对AI多任务间的并发冲突，系统在任务调度层设计了资源互斥智能分析算法，通过对临界资源的细粒度拓扑识别，并配合任务执行层的协同优化，实现了海量AI任务由传统低效串行执行向高效安全并发调度的转变。
+
+本工作经生产环境验证，已成功应用于业务场景，实现了从人工经验调度向智能自动化调度的转型。在数据适配方面，优化了任务接入流程与纠错效率；在决策自动化方面，通过自主可用性检测显著降低了运维干预度；在资源利用方面，互斥智能分析机制有效提升了任务并发水平。实际运行数据显示，系统每月稳定支撑约200个AI多任务运行，有效解决了大模型背景下的任务调度问题，具备较强的工业推广价值。
+
+\end{abstract}
+
+\begin{abstract*}
+
+As a cutting-edge application technology, large-scale AI models have been widely applied in numerous fields such as natural language processing, computer vision, and intelligent decision-making, significantly enhancing the production efficiency and intelligence levels of various industries. In actual production, developers often need to orchestrate complex multi-task flows involving different models and varying computing power requirements to complete tasks such as batch inference, automated testing, and data collection. However, with the development and widespread application of related technologies, traditional manual execution or task scheduling models based on simple scripts have become difficult to cope with the complex resource dependency topology and high-density scheduling demands in multi-task scenarios. This has exposed the following issues: first, existing technologies adapt poorly to AI-related characteristics, resulting in complex parameter processing and data governance in multi-task scenarios; second, the system cannot independently judge whether massive AI tasks meet execution conditions and relies on manual initiation, wasting human resources; third, it cannot identify resource mutual exclusion in AI multi-task scenarios, leading to inefficient serial task starting. These bottlenecks have hindered technical evolution, and related industries urgently require an AI multi-task resource scheduling system capable of precisely managing multi-task concurrency and possessing intelligent decision-making capabilities.
+
+To address the mismatch between the current scheduling mode and the characteristics of AI multi-task scenarios, this paper designs and implements a resource scheduling system tailored for AI multi-task scenarios. The system adopts a layered and decoupled architecture consisting of an API access layer, a task scheduling layer, and a task execution layer, ensuring efficient workflow and scalability through standardized interfaces between the layers. Firstly, the API access layer and the task execution layer establish an AI task parameter profiling and heterogeneous data mapping mechanism to achieve deep adaptation to complex parameters, effectively improving the system's efficiency in automatic data error correction and type inference accuracy under complex parameter conditions. Secondly, the task scheduling layer introduces a task availability detection mechanism with environmental awareness. By constructing an automated decision-making engine, it achieves real-time awareness of system load and operational strategies, thereby completely eliminating the reliance on manual intervention during the distribution of massive tasks. Finally, to address concurrency conflicts among multiple AI tasks, the system designs an intelligent resource mutual exclusion analysis algorithm in the task scheduling layer. Through fine-grained topological identification of critical resources and coordinated optimization with the task execution layer, it enables the transformation of massive AI tasks from traditional inefficient serial execution to efficient and safe concurrent scheduling.
+
+This work has been validated in production environments and successfully applied to business scenarios, achieving a transformation from manual experience-based scheduling to intelligent automated scheduling. In terms of data adaptation, it has optimized task integration processes and error correction efficiency; in decision-making automation, it has significantly reduced operational intervention through autonomous availability detection; in resource utilization, the mutual exclusion intelligent analysis mechanism has effectively enhanced task concurrency levels. Actual operational data shows that the system stably supports approximately 200 AI multi-tasks per month, effectively addressing task scheduling challenges in the context of large models, and demonstrating strong potential for industrial promotion.
+
+\end{abstract*}

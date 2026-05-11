@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280, height=720">
+<title>数据表格页 - 毕业答辩PPT模板</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1280px; height: 720px; overflow: hidden;
+    font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif;
+    background: #f7f8fc;
+    display: flex; flex-direction: column;
+  }
+
+  .header {
+    height: 80px; background: #fff;
+    display: flex; align-items: center;
+    padding: 0 60px;
+    border-bottom: 1px solid #e2e6ed;
+  }
+  .header .tag {
+    font-size: 13px; color: #003d7a;
+    font-weight: 600; letter-spacing: 3px;
+  }
+  .header .title {
+    font-size: 22px; color: #1a1a2e;
+    font-weight: 600; margin-left: 20px; letter-spacing: 2px;
+    padding-left: 20px; border-left: 1px solid #dde;
+  }
+
+  .content {
+    flex: 1; padding: 40px 70px;
+    display: flex; flex-direction: column;
+    gap: 24px;
+  }
+
+  /* 表格样式 */
+  .table-wrapper {
+    background: #fff; border-radius: 12px;
+    border: 1px solid #e8ecf1;
+    overflow: hidden;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.03);
+  }
+  .table-title {
+    padding: 18px 28px; font-size: 16px;
+    font-weight: 600; color: #1a1a2e;
+    border-bottom: 1px solid #f0f0f0;
+    letter-spacing: 1px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .table-title .dot {
+    width: 8px; height: 8px; background: #003d7a;
+    border-radius: 50%;
+  }
+  table {
+    width: 100%; border-collapse: collapse;
+  }
+  thead {
+    background: #f0f4f9;
+  }
+  thead th {
+    font-size: 13px; color: #003d7a;
+    padding: 14px 20px; text-align: center;
+    font-weight: 600; letter-spacing: 1px;
+    border-bottom: 2px solid #dde;
+  }
+  tbody td {
+    font-size: 14px; color: #444;
+    padding: 14px 20px; text-align: center;
+    border-bottom: 1px solid #f0f2f5;
+    letter-spacing: 0.5px;
+  }
+  tbody tr:hover {
+    background: #fafbfc;
+  }
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+  .val-up {
+    color: #27ae60; font-weight: 600;
+  }
+  .val-high {
+    color: #003d7a; font-weight: 700;
+    font-size: 16px;
+  }
+
+  /* 第二表格 */
+  .table-wrapper.compact table thead th {
+    font-size: 12px; padding: 10px 16px;
+  }
+  .table-wrapper.compact table tbody td {
+    font-size: 13px; padding: 10px 16px;
+  }
+
+  .page-num {
+    position: absolute; bottom: 20px; right: 70px;
+    font-size: 13px; color: #bbb;
+  }
+
+  /* 性能指标卡片行 */
+  .metric-cards {
+    display: flex; gap: 16px;
+  }
+  .mini-card {
+    flex: 1; background: #fff;
+    border-radius: 10px; padding: 18px 20px;
+    text-align: center; border: 1px solid #e8ecf1;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  }
+  .mini-card .mc-value {
+    font-size: 26px; font-weight: 700;
+    color: #003d7a; letter-spacing: 1px;
+  }
+  .mini-card .mc-label {
+    font-size: 12px; color: #999;
+    margin-top: 6px; letter-spacing: 1px;
+  }
+  .mini-card .mc-sub {
+    font-size: 11px; color: #27ae60;
+    margin-top: 2px;
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <span class="tag">测试分析</span>
+    <span class="title">系统性能测试结果</span>
+  </div>
+
+  <div class="content">
+    <!-- 指标卡片 -->
+    <div class="metric-cards">
+      <div class="mini-card">
+        <div class="mc-value">200+</div>
+        <div class="mc-label">月均支撑任务量</div>
+        <div class="mc-sub">↑ 300%</div>
+      </div>
+      <div class="mini-card">
+        <div class="mc-value">&lt;5min</div>
+        <div class="mc-label">任务平均接入耗时</div>
+        <div class="mc-sub">↓ 83%</div>
+      </div>
+      <div class="mini-card">
+        <div class="mc-value">78%</div>
+        <div class="mc-label">GPU资源利用率</div>
+        <div class="mc-sub">↑ 123%</div>
+      </div>
+      <div class="mini-card">
+        <div class="mc-value">0次</div>
+        <div class="mc-label">月均人工干预</div>
+        <div class="mc-sub">完全自动化</div>
+      </div>
+      <div class="mini-card">
+        <div class="mc-value">99.7%</div>
+        <div class="mc-label">系统可用率</div>
+        <div class="mc-sub">7×24h运行</div>
+      </div>
+    </div>
+
+    <!-- 表格 -->
+    <div class="table-wrapper">
+      <div class="table-title">
+        <span class="dot"></span>
+        数据校验模块性能测试
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>测试场景</th>
+            <th>参数复杂度</th>
+            <th>数据量级</th>
+            <th>纠错耗时</th>
+            <th>准确率</th>
+            <th>状态</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>简单参数校验</td>
+            <td>低 (≤5字段)</td>
+            <td>100条/批</td>
+            <td class="val-high">1.2s</td>
+            <td class="val-up">100%</td>
+            <td style="color:#27ae60">✔ 通过</td>
+          </tr>
+          <tr>
+            <td>嵌套参数校验</td>
+            <td>中 (5-20字段)</td>
+            <td>50条/批</td>
+            <td class="val-high">2.8s</td>
+            <td class="val-up">99.3%</td>
+            <td style="color:#27ae60">✔ 通过</td>
+          </tr>
+          <tr>
+            <td>混合类型校验</td>
+            <td>高 (20+字段)</td>
+            <td>30条/批</td>
+            <td class="val-high">5.1s</td>
+            <td class="val-up">98.7%</td>
+            <td style="color:#27ae60">✔ 通过</td>
+          </tr>
+          <tr>
+            <td>边界异常输入</td>
+            <td>极端值场景</td>
+            <td>50条/批</td>
+            <td class="val-high">3.4s</td>
+            <td class="val-up">97.2%</td>
+            <td style="color:#27ae60">✔ 通过</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="page-num">22</div>
+</body>
+</html>

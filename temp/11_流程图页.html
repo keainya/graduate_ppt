@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280, height=720">
+<title>流程图页 - 毕业答辩PPT模板</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1280px; height: 720px; overflow: hidden;
+    font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif;
+    background: #f7f8fc;
+    display: flex; flex-direction: column;
+  }
+
+  .header {
+    height: 80px; background: #fff;
+    display: flex; align-items: center;
+    padding: 0 60px;
+    border-bottom: 1px solid #e2e6ed;
+  }
+  .header .tag {
+    font-size: 13px; color: #003d7a;
+    font-weight: 600; letter-spacing: 3px;
+  }
+  .header .title {
+    font-size: 22px; color: #1a1a2e;
+    font-weight: 600; margin-left: 20px; letter-spacing: 2px;
+    padding-left: 20px; border-left: 1px solid #dde;
+  }
+
+  .flow-container {
+    flex: 1; padding: 40px 60px;
+    display: flex; align-items: center;
+    justify-content: center;
+    gap: 0;
+  }
+
+  /* 流程步骤 */
+  .flow-step {
+    display: flex; flex-direction: column;
+    align-items: center; position: relative;
+  }
+
+  .step-box {
+    width: 180px; padding: 24px 18px;
+    background: #fff; border-radius: 12px;
+    border: 2px solid #e0e5ec;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    position: relative;
+    z-index: 2;
+    transition: all 0.2s;
+  }
+  .step-box.active {
+    border-color: #003d7a;
+    background: linear-gradient(180deg, #f8fafe, #fff);
+  }
+  .step-box .step-num {
+    font-size: 13px; font-weight: 700;
+    color: #003d7a; letter-spacing: 2px;
+    background: #eef3f9; display: inline-block;
+    padding: 3px 12px; border-radius: 10px;
+    margin-bottom: 10px;
+  }
+  .step-box .step-icon {
+    font-size: 32px; margin-bottom: 8px;
+  }
+  .step-box .step-title {
+    font-size: 15px; font-weight: 700;
+    color: #1a1a2e; letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .step-box .step-desc {
+    font-size: 12px; color: #888;
+    line-height: 1.5; letter-spacing: 0.5px;
+  }
+
+  /* 连接箭头 */
+  .flow-arrow {
+    display: flex; align-items: center;
+    margin: 0 4px; position: relative; z-index: 1;
+  }
+  .arrow-line {
+    width: 70px; height: 2px;
+    background: linear-gradient(90deg, #003d7a, #5dade2);
+    position: relative;
+  }
+  .arrow-head {
+    width: 0; height: 0;
+    border-left: 10px solid #5dade2;
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+  }
+  .arrow-label {
+    position: absolute; top: -22px;
+    left: 50%; transform: translateX(-50%);
+    font-size: 10px; color: #999;
+    white-space: nowrap; letter-spacing: 1px;
+  }
+
+  /* 底部阶段标签 */
+  .phase-labels {
+    display: flex; justify-content: space-around;
+    padding: 0 60px 30px 60px; gap: 20px;
+  }
+  .phase-label {
+    text-align: center; flex: 1; max-width: 200px;
+  }
+  .phase-bar {
+    height: 4px; border-radius: 2px;
+    margin-bottom: 8px;
+  }
+  .phase-bar.p1 { background: #5dade2; }
+  .phase-bar.p2 { background: #3498db; }
+  .phase-bar.p3 { background: #003d7a; }
+  .phase-bar.p4 { background: #00264d; }
+
+  .phase-name {
+    font-size: 12px; color: #1a1a2e;
+    font-weight: 600; letter-spacing: 2px;
+  }
+  .phase-time {
+    font-size: 10px; color: #aaa;
+    letter-spacing: 1px;
+  }
+
+  .page-num {
+    position: absolute; bottom: 45px; right: 60px;
+    font-size: 13px; color: #bbb;
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <span class="tag">调度流程</span>
+    <span class="title">AI多任务资源调度核心流程</span>
+  </div>
+
+  <div class="flow-container">
+    <!-- Step 1 -->
+    <div class="flow-step">
+      <div class="step-box active">
+        <div class="step-num">STEP 1</div>
+        <div class="step-icon">📥</div>
+        <div class="step-title">任务接入</div>
+        <div class="step-desc">API接收任务请求<br>参数画像与数据校验</div>
+      </div>
+    </div>
+
+    <div class="flow-arrow">
+      <div class="arrow-line"><span class="arrow-label">参数校验通过</span></div>
+      <div class="arrow-head"></div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="flow-step">
+      <div class="step-box active">
+        <div class="step-num">STEP 2</div>
+        <div class="step-icon">🔍</div>
+        <div class="step-title">可用性检测</div>
+        <div class="step-desc">任务可用性检测<br>资源状态实时感知</div>
+      </div>
+    </div>
+
+    <div class="flow-arrow">
+      <div class="arrow-line"><span class="arrow-label">条件就绪</span></div>
+      <div class="arrow-head"></div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="flow-step">
+      <div class="step-box">
+        <div class="step-num">STEP 3</div>
+        <div class="step-icon">🧠</div>
+        <div class="step-title">互斥分析</div>
+        <div class="step-desc">临界资源拓扑识别<br>并发安全性判定</div>
+      </div>
+    </div>
+
+    <div class="flow-arrow">
+      <div class="arrow-line"><span class="arrow-label">安全并发</span></div>
+      <div class="arrow-head"></div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="flow-step">
+      <div class="step-box">
+        <div class="step-num">STEP 4</div>
+        <div class="step-icon">⚙️</div>
+        <div class="step-title">任务执行</div>
+        <div class="step-desc">负载均衡分发<br>并发执行与异常捕获</div>
+      </div>
+    </div>
+
+    <div class="flow-arrow">
+      <div class="arrow-line"><span class="arrow-label">结果回传</span></div>
+      <div class="arrow-head"></div>
+    </div>
+
+    <!-- Step 5 -->
+    <div class="flow-step">
+      <div class="step-box">
+        <div class="step-num">STEP 5</div>
+        <div class="step-icon">📊</div>
+        <div class="step-title">结果归集</div>
+        <div class="step-desc">结果同步与存储<br>任务状态更新</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase-labels">
+    <div class="phase-label">
+      <div class="phase-bar p1"></div>
+      <div class="phase-name">接入层</div>
+      <div class="phase-time">API Gateway</div>
+    </div>
+    <div class="phase-label" style="flex:2;">
+      <div class="phase-bar p2"></div>
+      <div class="phase-name">调度层 · 核心决策</div>
+      <div class="phase-time">Decision Engine</div>
+    </div>
+    <div class="phase-label">
+      <div class="phase-bar p3"></div>
+      <div class="phase-name">执行层</div>
+      <div class="phase-time">Execution</div>
+    </div>
+    <div class="phase-label">
+      <div class="phase-bar p4"></div>
+      <div class="phase-name">存储层</div>
+      <div class="phase-time">Persistence</div>
+    </div>
+  </div>
+
+  <div class="page-num">14</div>
+</body>
+</html>

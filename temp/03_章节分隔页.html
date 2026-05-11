@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280, height=720">
+<title>章节分隔页 - 毕业答辩PPT模板</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1280px; height: 720px; overflow: hidden;
+    font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif;
+    background: #fff;
+    display: flex;
+  }
+
+  /* 左侧大编号 + 装饰 */
+  .left-section {
+    width: 48%;
+    background: linear-gradient(180deg, #003d7a 0%, #001f3f 100%);
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    position: relative; overflow: hidden;
+  }
+  .left-section .big-num {
+    font-size: 180px; font-weight: 900;
+    color: rgba(255,255,255,0.06);
+    line-height: 1; letter-spacing: -10px;
+  }
+  /* 圆形装饰 */
+  .circle-1 {
+    position: absolute; bottom: -100px; right: -100px;
+    width: 300px; height: 300px;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 50%;
+  }
+  .circle-2 {
+    position: absolute; top: 60px; right: 120px;
+    width: 80px; height: 80px;
+    border: 2px solid rgba(255,255,255,0.15);
+    border-radius: 50%;
+  }
+  .left-section .ch-num {
+    font-size: 36px; font-weight: 700;
+    color: rgba(255,255,255,0.9);
+    letter-spacing: 4px;
+    position: relative; z-index: 2;
+    margin-bottom: 8px;
+  }
+  .left-section .ch-label {
+    font-size: 15px; color: rgba(255,255,255,0.45);
+    letter-spacing: 6px;
+  }
+
+  /* 右侧标题 */
+  .right-section {
+    flex: 1; display: flex; flex-direction: column;
+    justify-content: center; padding-left: 70px;
+  }
+  .right-section .chapter-title {
+    font-size: 40px; font-weight: 700;
+    color: #1a1a2e; letter-spacing: 3px;
+    line-height: 1.5;
+  }
+  .right-section .chapter-subtitle {
+    font-size: 18px; color: #888;
+    margin-top: 16px; letter-spacing: 2px;
+    font-weight: 300;
+  }
+  .right-section .accent-bar {
+    width: 50px; height: 3px;
+    background: #003d7a;
+    margin-top: 24px;
+  }
+  .right-section .key-points {
+    margin-top: 30px;
+    list-style: none;
+  }
+  .right-section .key-points li {
+    font-size: 15px; color: #666;
+    padding: 5px 0; letter-spacing: 1px;
+    position: relative; padding-left: 16px;
+  }
+  .right-section .key-points li::before {
+    content: '—'; position: absolute; left: 0;
+    color: #003d7a; font-size: 12px;
+  }
+
+  /* 顶部装饰条 */
+  .top-accent {
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 4px; background: linear-gradient(90deg, #003d7a, #5dade2);
+  }
+</style>
+</head>
+<body>
+  <div class="left-section">
+    <div class="big-num">03</div>
+    <div class="ch-num">第三章</div>
+    <div class="ch-label">CHAPTER THREE</div>
+    <div class="circle-1"></div>
+    <div class="circle-2"></div>
+  </div>
+
+  <div class="right-section">
+    <div class="top-accent" style="position:absolute;top:0;left:48%;right:0;"></div>
+    <h1 class="chapter-title">系统需求分析</h1>
+    <p class="chapter-subtitle">Requirements Analysis</p>
+    <div class="accent-bar"></div>
+    <ul class="key-points">
+      <li>AI多任务场景下的核心痛点梳理</li>
+      <li>分层解耦架构下的功能需求定义</li>
+      <li>非功能性需求：性能、稳定性与兼容性</li>
+    </ul>
+  </div>
+</body>
+</html>

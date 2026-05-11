@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280, height=720">
+<title>封面页 - 毕业答辩PPT模板</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1280px; height: 720px; overflow: hidden;
+    font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif;
+    background: linear-gradient(135deg, #0a1628 0%, #0d2137 30%, #0a2647 60%, #0d1b2a 100%);
+    position: relative;
+  }
+
+  /* 几何装饰 - 左下角 */
+  .geo-left {
+    position: absolute; left: -80px; bottom: -120px;
+    width: 600px; height: 500px;
+    border: 2px solid rgba(255,255,255,0.06);
+    border-radius: 50%;
+    transform: rotate(-20deg);
+  }
+  .geo-left::before {
+    content: ''; position: absolute;
+    inset: 40px;
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 50%;
+  }
+
+  /* 几何装饰 - 右上角 */
+  .geo-right {
+    position: absolute; right: -100px; top: -80px;
+    width: 450px; height: 350px;
+    border: 2px solid rgba(255,255,255,0.05);
+    border-radius: 50%;
+    transform: rotate(15deg);
+  }
+
+  /* 装饰线条 */
+  .accent-line {
+    position: absolute; left: 120px; top: 45%;
+    width: 60px; height: 3px;
+    background: linear-gradient(90deg, #c41e3a, transparent);
+  }
+
+  /* 主内容区 */
+  .main-content {
+    position: relative; z-index: 10;
+    padding: 160px 120px 0 120px;
+  }
+
+  /* USTC 标识 */
+  .ustc-badge {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 30px;
+  }
+  .ustc-logo {
+    width: 42px; height: 42px;
+    background: linear-gradient(135deg, #1a5276, #003d7a);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 20px; font-weight: 700;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+  .ustc-text {
+    color: rgba(255,255,255,0.55);
+    font-size: 15px; letter-spacing: 4px;
+    font-weight: 300;
+  }
+
+  /* 论文类型 */
+  .thesis-type {
+    color: #c41e3a;
+    font-size: 16px; letter-spacing: 6px;
+    margin-bottom: 24px;
+    font-weight: 400;
+  }
+
+  /* 标题 */
+  .title {
+    font-size: 42px; font-weight: 700; color: #ffffff;
+    letter-spacing: 3px; line-height: 1.4;
+    max-width: 750px;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+  }
+  .title .highlight {
+    color: #5dade2;
+  }
+
+  /* 底部信息 */
+  .info-grid {
+    position: absolute; bottom: 70px; left: 120px;
+    display: flex; gap: 50px;
+  }
+  .info-item {
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .info-label {
+    color: rgba(255,255,255,0.35); font-size: 12px;
+    letter-spacing: 2px;
+  }
+  .info-value {
+    color: rgba(255,255,255,0.85); font-size: 16px;
+    letter-spacing: 1px;
+  }
+
+  /* 日期 */
+  .date-text {
+    position: absolute; bottom: 70px; right: 120px;
+    color: rgba(255,255,255,0.45); font-size: 15px;
+    letter-spacing: 2px;
+  }
+
+  /* 小点装饰 */
+  .dots {
+    position: absolute; right: 140px; top: 60px;
+    display: grid; grid-template-columns: repeat(5, 8px);
+    gap: 14px;
+  }
+  .dot {
+    width: 4px; height: 4px; border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+  }
+</style>
+</head>
+<body>
+  <div class="geo-left"></div>
+  <div class="geo-right"></div>
+  <div class="dots" id="dotsContainer"></div>
+
+  <div class="main-content">
+    <div class="ustc-badge">
+      <div class="ustc-logo">USTC</div>
+      <span class="ustc-text">中国科学技术大学</span>
+    </div>
+
+    <div class="thesis-type">硕士学位论文答辩</div>
+
+    <h1 class="title">
+      面向<span class="highlight">AI多任务场景</span>的<br>资源调度系统设计与实现
+    </h1>
+
+    <div class="accent-line"></div>
+  </div>
+
+  <div class="info-grid">
+    <div class="info-item">
+      <span class="info-label">答 辩 人</span>
+      <span class="info-value">谢博谦</span>
+    </div>
+    <div class="info-item">
+      <span class="info-label">专    业</span>
+      <span class="info-value">软件工程</span>
+    </div>
+    <div class="info-item">
+      <span class="info-label">导    师</span>
+      <span class="info-value">─────</span>
+    </div>
+  </div>
+
+  <div class="date-text">2026年5月</div>
+
+  <script>
+    // 生成随机装饰点
+    const container = document.getElementById('dotsContainer');
+    for (let i = 0; i < 40; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'dot';
+      dot.style.opacity = 0.05 + Math.random() * 0.15;
+      container.appendChild(dot);
+    }
+  </script>
+</body>
+</html>

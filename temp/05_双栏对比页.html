@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280, height=720">
+<title>双栏对比页 - 毕业答辩PPT模板</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1280px; height: 720px; overflow: hidden;
+    font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif;
+    background: #f0f3f8;
+    display: flex; flex-direction: column;
+  }
+
+  .header {
+    height: 85px; background: #fff;
+    display: flex; align-items: center;
+    padding: 0 70px;
+    border-bottom: 1px solid #e2e6ed;
+  }
+  .header .tag {
+    font-size: 13px; color: #003d7a;
+    font-weight: 600; letter-spacing: 3px;
+  }
+  .header .title {
+    font-size: 22px; color: #1a1a2e;
+    font-weight: 600; letter-spacing: 2px;
+    margin-left: 20px; padding-left: 20px;
+    border-left: 1px solid #dde;
+  }
+
+  /* 对比容器 */
+  .compare-container {
+    flex: 1; display: flex; gap: 0;
+    padding: 30px 50px;
+  }
+
+  /* 对比卡片 */
+  .compare-card {
+    flex: 1; background: #fff; border-radius: 12px;
+    padding: 30px 35px; position: relative;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  }
+  .compare-card:first-child {
+    margin-right: 30px;
+  }
+
+  .card-badge {
+    display: inline-block; padding: 6px 18px;
+    border-radius: 20px; font-size: 14px;
+    font-weight: 600; letter-spacing: 2px;
+    margin-bottom: 20px;
+  }
+  .card-badge.before {
+    background: #fff0f0; color: #c0392b;
+    border: 1px solid #f5c6cb;
+  }
+  .card-badge.after {
+    background: #f0fff4; color: #27ae60;
+    border: 1px solid #c3e6cb;
+  }
+
+  .card-title {
+    font-size: 19px; font-weight: 700;
+    color: #1a1a2e; margin-bottom: 20px;
+    letter-spacing: 1px;
+  }
+
+  .card-list {
+    list-style: none;
+  }
+  .card-list li {
+    font-size: 14px; color: #555;
+    padding: 10px 0; border-bottom: 1px solid #f0f0f0;
+    display: flex; align-items: flex-start;
+    gap: 10px; line-height: 1.6;
+  }
+  .card-list li .icon {
+    font-size: 16px; flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .card-list .neg .icon { color: #c0392b; }
+  .card-list .pos .icon { color: #27ae60; }
+
+  /* 中间 VS */
+  .vs-divider {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    width: 50px; color: #bbb;
+    font-size: 14px; font-weight: 700;
+    letter-spacing: 2px;
+  }
+
+  /* 底部提示 */
+  .metric-row {
+    padding: 0 50px 25px 50px;
+    display: flex; gap: 30px;
+  }
+  .metric-card {
+    background: #fff; border-radius: 10px;
+    padding: 16px 24px; flex: 1;
+    text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    border-top: 3px solid #003d7a;
+  }
+  .metric-value {
+    font-size: 28px; font-weight: 700; color: #003d7a;
+    letter-spacing: 1px;
+  }
+  .metric-label {
+    font-size: 12px; color: #999; margin-top: 4px;
+    letter-spacing: 1px;
+  }
+
+  .page-num {
+    position: absolute; bottom: 20px; right: 55px;
+    font-size: 13px; color: #bbb;
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <span class="tag">性能对比</span>
+    <span class="title">系统上线前后关键指标对比</span>
+  </div>
+
+  <div class="compare-container">
+    <div class="compare-card">
+      <span class="card-badge before">✦ 改 造 前</span>
+      <h3 class="card-title">人工经验调度模式</h3>
+      <ul class="card-list">
+        <li class="neg">
+          <span class="icon">✕</span>
+          <span>任务参数手动校验，平均耗时 <b>30min/任务</b></span>
+        </li>
+        <li class="neg">
+          <span class="icon">✕</span>
+          <span>依赖人工判断任务执行时机，月干预 <b>200+次</b></span>
+        </li>
+        <li class="neg">
+          <span class="icon">✕</span>
+          <span>资源互斥无法识别，任务<span style="color:#c0392b;font-weight:600;">串行执行</span></span>
+        </li>
+        <li class="neg">
+          <span class="icon">✕</span>
+          <span>GPU资源利用率不足 <b>35%</b></span>
+        </li>
+        <li class="neg">
+          <span class="icon">✕</span>
+          <span>月均支持任务量约 <b>50个</b></span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="vs-divider">VS</div>
+
+    <div class="compare-card">
+      <span class="card-badge after">✔ 改 造 后</span>
+      <h3 class="card-title">智能自动化调度系统</h3>
+      <ul class="card-list">
+        <li class="pos">
+          <span class="icon">✔</span>
+          <span>参数自动校验纠错，耗时 <b>&lt; 5min/任务</b></span>
+        </li>
+        <li class="pos">
+          <span class="icon">✔</span>
+          <span>自主可用性检测，<b>零人工干预</b></span>
+        </li>
+        <li class="pos">
+          <span class="icon">✔</span>
+          <span>资源互斥智能分析，<span style="color:#27ae60;font-weight:600;">安全并发执行</span></span>
+        </li>
+        <li class="pos">
+          <span class="icon">✔</span>
+          <span>GPU资源利用率提升至 <b>78%</b></span>
+        </li>
+        <li class="pos">
+          <span class="icon">✔</span>
+          <span>月均稳定支撑 <b>200+个</b> AI多任务</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="metric-row">
+    <div class="metric-card">
+      <div class="metric-value">6x</div>
+      <div class="metric-label">参数校验效率提升</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">100%</div>
+      <div class="metric-label">人工干预消除率</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">4x</div>
+      <div class="metric-label">月均任务吞吐量提升</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">2.2x</div>
+      <div class="metric-label">GPU利用率提升</div>
+    </div>
+  </div>
+
+  <div class="page-num">18</div>
+</body>
+</html>

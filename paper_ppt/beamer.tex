@@ -1,0 +1,1024 @@
+% !TeX program = xelatex
+% 中国科学技术大学 硕士学位论文答辩PPT
+% 面向AI多任务场景的资源调度系统设计与实现
+
+\documentclass[aspectratio=169,UTF8,xcolor=table]{ctexbeamer}
+
+% ==================== 包 ====================
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning}
+
+% ==================== 主题与配色 ====================
+\usetheme{Madrid}
+\usecolortheme{default}
+
+% USTC 校徽蓝色主色调
+\definecolor{ustcblue}{RGB}{0,61,121}
+\definecolor{ustclight}{RGB}{0,100,180}
+\definecolor{ustcgray}{RGB}{100,100,100}
+
+\setbeamercolor{structure}{fg=ustcblue}
+\setbeamercolor{palette primary}{fg=white,bg=ustcblue}
+\setbeamercolor{palette secondary}{fg=white,bg=ustclight}
+\setbeamercolor{palette tertiary}{fg=white,bg=ustcblue}
+\setbeamercolor{titlelike}{fg=ustcblue}
+\setbeamercolor{frametitle}{fg=white,bg=ustcblue}
+\setbeamercolor{block title}{fg=white,bg=ustcblue}
+\setbeamercolor{block body}{fg=black,bg=ustcblue!10}
+\setbeamercolor{alerted text}{fg=red!70!black}
+\setbeamercolor{example text}{fg=ustcblue!80!green}
+
+% ==================== 字体与样式 ====================
+\setbeamerfont{frametitle}{size=\Large}
+\setbeamerfont{title}{size=\large}
+\usefonttheme{professionalfonts}
+
+% 去掉导航条
+\setbeamertemplate{navigation symbols}{}
+
+% 页脚信息
+\setbeamertemplate{footline}{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.3\paperwidth,ht=2.5ex,dp=1.125ex,leftskip=.3cm plus1fill]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertshortauthor
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.5\paperwidth,ht=2.5ex,dp=1.125ex,center]{title in head/foot}%
+    \usebeamerfont{title in head/foot}\insertshorttitle
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.2\paperwidth,ht=2.5ex,dp=1.125ex,rightskip=.3cm plus1fil]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertframenumber{}/\inserttotalframenumber
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+
+% 设置目录在每个section前自动显示
+\AtBeginSection[]{
+  \begin{frame}{目录}
+    \tableofcontents[currentsection,hideothersubsections]
+  \end{frame}
+}
+
+% ==================== 基本信息 ====================
+\title[AI多任务资源调度系统]{面向AI多任务场景的资源调度系统\\设计与实现}
+\subtitle{Design and Implementation of Resource Scheduling System\\for AI Multi-task Scenarios}
+\author[答辩人]{\\ 答辩人：XXX \\ 导\quad 师：XXX}
+\institute[USTC]{中国科学技术大学 \\ 软件学院}
+\date{\today}
+
+% ==================== 文档开始 ====================
+\begin{document}
+
+% ============================================
+% 第1页 · 封面
+% ============================================
+\begin{frame}[plain]
+  \titlepage
+\end{frame}
+
+% ============================================
+% 第2页 · 目录
+% ============================================
+\begin{frame}{目录}
+  \tableofcontents[hideallsubsections]
+\end{frame}
+
+% ============================================
+% 第一部分：研究背景与意义（3页）
+% ============================================
+\section{研究背景与意义}
+
+% 第3页 · AI多任务调度的核心矛盾
+\begin{frame}{AI多任务调度的核心矛盾}
+  \begin{block}{背景}
+    人工智能大模型在NLP、CV、智能决策等领域广泛应用，\textbf{多任务调度需求呈爆发式增长}。
+  \end{block}
+
+  \pause
+  \begin{alertblock}{矛盾一：AI特性适配性差}
+    传统调度系统无法有效处理AI任务的\textbf{异构参数}与\textbf{非结构化数据}，数据治理繁杂。
+  \end{alertblock}
+
+  \pause
+  \begin{alertblock}{矛盾二：决策过度依赖人工}
+    系统\textbf{无法自动判断}海量AI任务是否具备执行条件，依赖人工逐一启动，浪费人力资源。
+  \end{alertblock}
+
+  \pause
+  \begin{alertblock}{矛盾三：缺乏资源互斥检测}
+    无法识别GPU等AI临界资源的互斥冲突，任务只能\textbf{低效串行}执行，计算资源严重浪费。
+  \end{alertblock}
+\end{frame}
+
+% 第4页 · 研究意义
+\begin{frame}{研究意义}
+  \begin{columns}[T]
+    \column{0.48\textwidth}
+    \begin{block}{理论意义}
+      \begin{itemize}
+        \item 填补AI多任务调度领域的\textbf{技术空白}
+        \item 提出面向AI特性的调度算法与数据适配机制
+        \item 为异构资源互斥检测提供新思路
+      \end{itemize}
+    \end{block}
+
+    \column{0.48\textwidth}
+    \begin{block}{工程价值}
+      \begin{itemize}
+        \item 已落地\textbf{腾讯TEG}真实业务环境
+        \item 月稳定支撑约\textbf{200个}AI多任务运行
+        \item 显著提升资源利用率，降低运维人力投入
+      \end{itemize}
+    \end{block}
+  \end{columns}
+
+  \vspace{0.5cm}
+  \begin{center}
+    \textbf{顺应AI大模型规模化落地的必然需求}
+  \end{center}
+\end{frame}
+
+% ============================================
+% 第二部分：国内外研究现状与问题分析（2页）
+% ============================================
+\section{国内外研究现状}
+
+% 第5页 · 任务调度技术发展脉络
+\begin{frame}{任务调度技术发展脉络}
+  \begin{columns}[T]
+    \column{0.55\textwidth}
+    \textbf{发展历程}
+    \begin{itemize}
+      \item \textbf{1960s-80s}：批处理 → 分布式调度
+      \item \textbf{1990s-2010s}：智能化、可视化，仍聚焦"多任务并发效率"
+      \item \textbf{开源方案}：Airflow、Oozie — 灵活但复杂度高，\textbf{无AI场景适配}
+    \end{itemize}
+
+    \column{0.45\textwidth}
+    \begin{exampleblock}{核心缺陷}
+      从未针对AI大模型\\
+      \textbf{高算力、长周期、}\\
+      \textbf{多模态交互}特性\\
+      进行专门优化
+    \end{exampleblock}
+  \end{columns}
+
+  \vspace{0.4cm}
+  \begin{center}
+    \begin{tabular}{|c|c|c|}
+      \hline
+      \textbf{方案} & \textbf{优势} & \textbf{AI适配度} \\
+      \hline
+      人工调度 & 灵活 & 极低 \\
+      \hline
+      脚本队列 & 简单 & 低 \\
+      \hline
+      Airflow/Oozie & 功能丰富 & 低（无AI特性优化）\\
+      \hline
+      \textcolor{ustcblue}{\textbf{本系统}} & \textbf{AI深度适配} & \textbf{高} \\
+      \hline
+    \end{tabular}
+  \end{center}
+\end{frame}
+
+% 第6页 · 任务可用性检测 & 资源互斥检测现状
+\begin{frame}{现有检测机制的局限}
+  \begin{block}{任务可用性检测 — 逻辑引擎}
+    \begin{itemize}
+      \item 单调推理 → 非单调推理 → 动态自适应
+      \item 均依赖\textbf{静态规则}与预定义知识，缺乏\textbf{综合环境感知}
+      \item 无法分析AI任务的目标、资源约束、环境动态性
+    \end{itemize}
+  \end{block}
+
+  \pause
+  \begin{block}{资源互斥检测 — 传统互斥算法}
+    \begin{itemize}
+      \item Dekker → Peterson → Lamport时间戳
+      \item 面向\textbf{传统同构资源}，无法应对GPU/TPU等\textbf{AI异构资源}
+      \item 缺乏对资源需求动态变化、碎片化问题的处理能力
+    \end{itemize}
+  \end{block}
+
+  \pause
+  \begin{exampleblock}{结论}
+    现有技术体系在AI多任务场景下全面失效，亟需全新设计方案。
+  \end{exampleblock}
+\end{frame}
+
+% ============================================
+% 第三部分：系统整体设计（4页）
+% ============================================
+\section{系统整体设计}
+
+% 第7页 · 系统五大设计原则
+\begin{frame}{系统五大设计原则}
+  \begin{enumerate}
+    \item \textbf{异构参数适配}
+    \begin{itemize}
+      \item 兼容多模态、多类型AI任务的数据格式与传输需求
+    \end{itemize}
+
+    \item \textbf{环境感知与决策自主化}
+    \begin{itemize}
+      \item 实时感知系统负载与运营策略，消除人工干预，引擎自决
+    \end{itemize}
+
+    \item \textbf{临界资源隔离与并发安全}
+    \begin{itemize}
+      \item 细粒度互斥检测，保障GPU等独占性资源的安全并发
+    \end{itemize}
+
+    \item \textbf{架构分层解耦}
+    \begin{itemize}
+      \item API接入层 / 任务调度层 / 任务执行层，标准化接口
+    \end{itemize}
+
+    \item \textbf{细粒度权限管控}
+    \begin{itemize}
+      \item OAuth2.0 + 自研权限微服务，保障系统安全
+    \end{itemize}
+  \end{enumerate}
+\end{frame}
+
+% 第8页 · 系统总体架构图
+\begin{frame}{系统总体架构}
+  \begin{center}
+    \begin{tikzpicture}[
+      node distance=0.5cm,
+      box/.style={rectangle, draw, minimum width=10.5cm, minimum height=1.8cm,
+                  rounded corners=4pt, font=\small},
+      titlebox/.style={rectangle, draw=ustcblue, fill=ustcblue!15, minimum width=2cm,
+                       minimum height=0.7cm, rounded corners=2pt, font=\small\bfseries},
+      detail/.style={rectangle, draw=ustcgray!50, fill=ustcgray!10, minimum width=2.4cm,
+                     minimum height=0.6cm, rounded corners=2pt, font=\footnotesize, align=center},
+    ]
+
+    % Layer 1: API接入层
+    \node[box,draw=ustcblue,fill=ustcblue!8] (api) at (0,4.5) {};
+    \node[titlebox] at (-3.8,4.5) {API接入层};
+    \node[detail] at (0.3,4.9) {权限鉴定模块};
+    \node[detail] at (3.2,4.9) {数据校验模块};
+    \node[detail] at (0.3,4.1) {业务接口模块};
+    \node[detail] at (3.2,4.1) {OAuth2.0认证};
+
+    % Layer 2: 任务调度层
+    \node[box,draw=ustcblue,fill=ustcblue!8] (sched) at (0,2.1) {};
+    \node[titlebox] at (-3.8,2.1) {任务调度层};
+    \node[detail,fill=ustcblue!5] at (-1.5,2.5) {任务可用性检测};
+    \node[detail,fill=ustcblue!5] at (1.7,2.5) {资源可用性检测};
+    \node[detail,fill=ustcblue!5] at (4.9,2.5) {负载均衡};
+    \node[detail,fill=ustcblue!5] at (-1.5,1.7) {数据同步模块};
+    \node[detail,fill=ustcblue!5] at (1.7,1.7) {容错与恢复};
+    \node[detail,fill=ustcblue!5] at (4.9,1.7) {Celery+Redis};
+
+    % Layer 3: 任务执行层
+    \node[box,draw=ustcblue,fill=ustcblue!8] (exec) at (0,-0.3) {};
+    \node[titlebox] at (-3.8,-0.3) {任务执行层};
+    \node[detail] at (0.3,0.1) {参数传递约定};
+    \node[detail] at (3.2,0.1) {任务编辑机制};
+    \node[detail] at (1.75,-0.7) {异常捕获机制};
+
+    % Arrows
+    \draw[->, thick, ustcblue] (api.south) -- (sched.north) node[midway,right,font=\footnotesize] {标准化接口};
+    \draw[->, thick, ustcblue] (sched.south) -- (exec.north) node[midway,right,font=\footnotesize] {调度指令};
+
+  \end{tikzpicture}
+  \end{center}
+
+  \vspace{-0.2cm}
+  \begin{center}
+    \footnotesize
+    \textbf{核心技术栈：} FastAPI ~|~ Celery ~|~ Redis ~|~ PostgreSQL ~|~ Docker/K8s ~|~ tRPC
+  \end{center}
+\end{frame}
+
+% 第9页 · 需求分析全景
+\begin{frame}{需求分析全景}
+  \begin{columns}[T]
+    \column{0.48\textwidth}
+    \begin{block}{功能需求}
+      \textbf{API接入层}
+      \begin{itemize}
+        \item 任务CRUD、权限鉴定
+        \item 数据自动纠错与类型推断
+      \end{itemize}
+      \textbf{任务调度层}
+      \begin{itemize}
+        \item 任务/资源可用性检测
+        \item 负载均衡、数据同步
+        \item 容错与恢复机制
+      \end{itemize}
+      \textbf{任务执行层}
+      \begin{itemize}
+        \item 异构参数映射
+        \item 任务敏捷编辑
+        \item 异常捕获与处理
+      \end{itemize}
+    \end{block}
+
+    \column{0.48\textwidth}
+    \begin{block}{非功能需求}
+      \begin{itemize}
+        \item \textbf{性能需求}
+        \begin{itemize}
+          \item 高并发低延迟响应
+          \item API接口 <200ms
+        \end{itemize}
+        \item \textbf{稳定性需求}
+        \begin{itemize}
+          \item 故障自愈，数据不丢失
+          \item 7×24小时可靠运行
+        \end{itemize}
+        \item \textbf{兼容性需求}
+        \begin{itemize}
+          \item Linux/Windows双平台
+          \item x86/ARM多架构支持
+        \end{itemize}
+      \end{itemize}
+    \end{block}
+  \end{columns}
+\end{frame}
+
+% 第10页 · 数据库设计
+\begin{frame}{数据库设计}
+  \begin{center}
+    \textbf{5张核心表，支撑系统全部业务流程}
+  \end{center}
+
+  \vspace{0.3cm}
+  \begin{columns}[T]
+    \column{0.45\textwidth}
+    \begin{table}
+      \centering
+      \begin{tabular}{|l|c|l|}
+        \hline
+        \textbf{表名} & \textbf{核心字段} & \textbf{说明} \\
+        \hline
+        用户表 & id, role & 系统用户 \\
+        \hline
+        任务组表 & id, owner & 任务分组 \\
+        \hline
+        任务表 & id, config & 核心任务 \\
+        \hline
+        附件表 & id, url & 任务附件 \\
+        \hline
+        资源占用表 & id, type & 互斥检测 \\
+        \hline
+      \end{tabular}
+    \end{table}
+
+    \column{0.55\textwidth}
+    \begin{block}{设计要点}
+      \begin{itemize}
+        \item 任务表通过JSON字段承载异构AI参数
+        \item 资源占用表支撑细粒度互斥分析
+        \item 任务组支持批量调度与依赖管理
+        \item 使用SQLAlchemy ORM + Alembic版本迁移
+      \end{itemize}
+    \end{block}
+  \end{columns}
+\end{frame}
+
+% ============================================
+% 第四部分：关键技术创新（7页）⭐ 重点
+% ============================================
+\section{关键技术创新}
+
+% 第11页 · 创新点总览
+\begin{frame}{三大创新点总览}
+  \vspace{0.3cm}
+  \begin{center}
+    \begin{tikzpicture}[
+      innov/.style={rectangle, rounded corners=6pt, minimum width=9cm, minimum height=1.5cm,
+                    text width=8.5cm, align=center, font=\large},
+    ]
+
+    \node[innov, draw=ustcblue, fill=ustcblue!10] (i1) at (0,3) {
+      \textbf{创新一}：AI参数画像与数据自动纠错\\
+      \footnotesize{克服传统系统对AI异构参数适配不足的问题}
+    };
+
+    \node[innov, draw=ustcblue!80, fill=ustcblue!10] (i2) at (0,0.8) {
+      \textbf{创新二}：环境感知的自动化决策引擎\\
+      \footnotesize{消除海量任务调度中的人工触发环节}
+    };
+
+    \node[innov, draw=ustcblue!60, fill=ustcblue!10] (i3) at (0,-1.4) {
+      \textbf{创新三}：资源互斥智能分析算法\\
+      \footnotesize{实现AI临界资源的安全高效并发调度}
+    };
+
+    \draw[->, thick, ustcblue, dashed] (i1) -- (i2);
+    \draw[->, thick, ustcblue, dashed] (i2) -- (i3);
+
+  \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+% ---------- 创新一 ----------
+% 第12页 · 创新一（问题+方案）
+\begin{frame}{创新一：AI参数画像与数据自动纠错}
+  \begin{alertblock}{痛点}
+    传统调度系统仅支持结构化数据，无法处理AI任务的\textbf{异构、非结构化参数}，频繁导致任务失败。
+  \end{alertblock}
+
+  \pause
+  \begin{exampleblock}{解决方案}
+    \textbf{建立大模型任务参数画像 + Pydantic自动纠偏}
+    \begin{enumerate}
+      \item \textbf{参数画像}：梳理各AI模型参数特征，建立异构数据映射机制
+      \item \textbf{自动纠偏逻辑}：
+      \begin{itemize}
+        \item 全角标点 $\rightarrow$ 半角标点
+        \item 冗余符号自动清理
+        \item float $\rightarrow$ int 无损类型转换
+        \item 参数缺失智能补全
+      \end{itemize}
+      \item \textbf{JSON/Dict深度映射}：实现多层级参数的精准传递
+    \end{enumerate}
+  \end{exampleblock}
+\end{frame}
+
+% 第13页 · 创新一（效果）
+\begin{frame}{创新一：数据自动纠错 — 效果对比}
+  \begin{columns}[T]
+    \column{0.48\textwidth}
+    \begin{block}{改造前：手动校验}
+      \begin{itemize}
+        \item 程序员人工逐条检查参数
+        \item 全角/半角混用难以发现
+        \item 类型错误导致运行时崩溃
+        \item 平均每任务耗时>5min
+      \end{itemize}
+    \end{block}
+
+    \column{0.48\textwidth}
+    \begin{exampleblock}{改造后：自动纠偏}
+      \begin{itemize}
+        \item 系统自动检测并纠正参数
+        \item 全角自动转半角
+        \item 类型错误自动推断转换
+        \item 平均每任务<1s处理
+      \end{itemize}
+    \end{exampleblock}
+  \end{columns}
+
+  \vspace{0.3cm}
+  \begin{center}
+    \begin{tikzpicture}
+      \draw[->, thick] (0,0) -- (6,0) node[right] {};
+      \node at (0,-0.4) {\footnotesize 手动校验};
+      \node at (6,-0.4) {\footnotesize 自动纠偏};
+      \node[ustcblue,font=\bfseries] at (3,0.3) {效率提升300$\times$};
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+% ---------- 创新二 ----------
+% 第14页 · 创新二（问题+方案）
+\begin{frame}{创新二：基于逻辑引擎的自动化决策}
+  \begin{alertblock}{痛点}
+    海量AI任务需\textbf{人工逐一判断}是否可执行，浪费人力且效率低下。
+  \end{alertblock}
+
+  \pause
+  \begin{exampleblock}{解决方案}
+    \textbf{构建"条件-规则"二级嵌套逻辑引擎}
+    \begin{columns}[T]
+      \column{0.5\textwidth}
+      \textbf{条件层（环境感知）}
+      \begin{itemize}
+        \item 系统负载状态
+        \item 运营策略配置
+        \item 外部依赖可用性
+      \end{itemize}
+
+      \column{0.5\textwidth}
+      \textbf{规则层（策略驱动）}
+      \begin{itemize}
+        \item 用户自定义调度策略
+        \item 配置化管理，无需改代码
+        \item 多条件组合判定
+      \end{itemize}
+    \end{columns}
+  \end{exampleblock}
+
+  \pause
+  \begin{center}
+    \textbf{核心转变：} 从"人工经验驱动" $\longrightarrow$ "引擎自决"
+  \end{center}
+\end{frame}
+
+% 第15页 · 创新二（效果）
+\begin{frame}{创新二：自动化决策 — 效果对比}
+  \begin{center}
+    \begin{tabular}{|p{3cm}|p{4.2cm}|p{4.2cm}|}
+      \hline
+      \textbf{维度} & \textbf{传统方式} & \textbf{本系统} \\
+      \hline
+      启动方式 & 人工逐任务点击 & 引擎自动判断下发 \\
+      \hline
+      判断依据 & 人工经验 & 实时环境感知 + 规则引擎 \\
+      \hline
+      决策时延 & 分钟级 & 毫秒级 \\
+      \hline
+      人力投入 & 高（需运维值守） & 低（全自动运行） \\
+      \hline
+      夜间/周末 & 需排班值守 & 无人值守自动运行 \\
+      \hline
+    \end{tabular}
+  \end{center}
+
+  \vspace{0.3cm}
+  \begin{exampleblock}{效果}
+    彻底消除海量任务下发过程中对人工干预的依赖，实现7×24小时自动化调度。
+  \end{exampleblock}
+\end{frame}
+
+% ---------- 创新三 ----------
+% 第16页 · 创新三（问题+方案）
+\begin{frame}{创新三：资源互斥智能分析算法}
+  \begin{alertblock}{痛点}
+    GPU等AI临界资源存在互斥冲突，传统调度方案只能\textbf{保守串行执行}，资源利用率低。
+  \end{alertblock}
+
+  \pause
+  \begin{exampleblock}{解决方案}
+    \textbf{细粒度"临界资源表" + 互斥智能检测}
+    \begin{enumerate}
+      \item \textbf{资源拓扑建模}：标注GPU、显存等独占性资源的拓扑关系
+      \item \textbf{互斥检测算法}：精准识别任务间的资源冲突，动态判定并发可行性
+      \item \textbf{权重轮询负载均衡}：对无冲突任务进行动态分流，安全并发
+    \end{enumerate}
+  \end{exampleblock}
+
+  \pause
+  \begin{center}
+    \textbf{资源互斥判断：}同一GPU上的多个推理任务 → 自动检测$\rightarrow$串行排队 \\
+    \qquad\qquad\qquad\ 不同GPU上的独立任务 → 自动检测$\rightarrow$并发执行
+  \end{center}
+\end{frame}
+
+% 第17页 · 创新三（效果）
+\begin{frame}{创新三：资源互斥分析 — 效果对比}
+  \begin{center}
+    \begin{tikzpicture}
+      % Before
+      \node[font=\small\bfseries] at (-3,2.2) {改造前：保守串行};
+      \draw[->, thick, ustcgray] (-5.5,1.5) -- (5.5,1.5) node[right] {时间};
+
+      \foreach \x/\c in {0/ustcblue!30, 2/ustclight!40, 4/ustcblue!30} {
+        \node[rectangle, draw, fill=\c, minimum width=1.5cm, minimum height=0.6cm, font=\tiny] at (\x,0.8) {任务};
+      }
+
+      % After
+      \node[font=\small\bfseries] at (-3,-1.3) {改造后：安全并发};
+      \draw[->, thick, ustcgray] (-5.5,-2.0) -- (5.5,-2.0) node[right] {时间};
+
+      \node[rectangle, draw, fill=ustcblue!30, minimum width=1.5cm, minimum height=0.6cm, font=\tiny] at (0,-2.8) {任务1};
+      \node[rectangle, draw, fill=ustclight!40, minimum width=1.5cm, minimum height=0.6cm, font=\tiny] at (0,-3.6) {任务2};
+      \node[rectangle, draw, fill=ustcblue!30, minimum width=1.5cm, minimum height=0.6cm, font=\tiny] at (0,-4.4) {任务3};
+      \node[rectangle, draw, fill=ustclight!40, minimum width=1.5cm, minimum height=0.6cm, font=\tiny] at (2.5,-2.8) {任务4};
+      \node[rectangle, draw, fill=ustcblue!30, minimum width=1.5cm, minimum height=0.6cm, font=\tiny] at (2.5,-3.6) {任务5};
+
+    \end{tikzpicture}
+  \end{center}
+
+  \begin{exampleblock}{效果}
+    从"低效串行" → "高效安全并发"，显著提升GPU资源利用率与任务吞吐量。
+  \end{exampleblock}
+\end{frame}
+
+% 第18页 · 系统总体工作流程
+\begin{frame}{系统总体工作流程}
+  \begin{center}
+    \begin{tikzpicture}[
+      block/.style={rectangle, draw=ustcblue, fill=ustcblue!10, minimum width=2.2cm,
+                    minimum height=0.8cm, rounded corners=3pt, font=\small, align=center},
+      arrow/.style={->, thick, ustcblue},
+    ]
+
+    \node[block] (submit) at (0,2) {任务提交};
+    \node[block] (verify) at (2.5,2) {参数纠错};
+    \node[block] (avail) at (5,2) {可用性检测};
+    \node[block] (mutex) at (7.5,2) {互斥分析};
+    \node[block] (balance) at (10,2) {负载分配};
+    \node[block] (exec) at (12.5,2) {并发执行};
+    \node[block] (result) at (15,2) {结果回传};
+
+    \draw[arrow] (submit) -- (verify);
+    \draw[arrow] (verify) -- (avail);
+    \draw[arrow] (avail) -- (mutex);
+    \draw[arrow] (mutex) -- (balance);
+    \draw[arrow] (balance) -- (exec);
+    \draw[arrow] (exec) -- (result);
+
+    % Layer labels
+    \node[font=\footnotesize,ustcgray] at (1.25,3.2) {API接入层};
+    \node[font=\footnotesize,ustcgray] at (7.5,3.2) {任务调度层};
+    \node[font=\footnotesize,ustcgray] at (13.75,3.2) {任务执行层};
+
+    \draw[ustcgray!50, dashed] (3.75,3) -- (3.75,0.5);
+    \draw[ustcgray!50, dashed] (11.25,3) -- (11.25,0.5);
+
+  \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.3cm}
+  \begin{center}
+    \footnotesize
+    三层协同：任务提交 $\to$ 参数纠错 $\to$ 可用性检测 $\to$ 互斥分析 $\to$ 负载分配 $\to$ 并发执行 $\to$ 结果回传
+  \end{center}
+\end{frame}
+
+% ============================================
+% 第五部分：系统测试与分析（4页）
+% ============================================
+\section{系统测试与分析}
+
+% 第19页 · 测试环境与方法
+\begin{frame}{测试环境与方法}
+  \begin{columns}[T]
+    \column{0.45\textwidth}
+    \begin{block}{测试环境}
+      \begin{itemize}
+        \item 腾讯TEG生产环境
+        \item Docker + Kubernetes集群
+        \item PostgreSQL + Redis
+      \end{itemize}
+    \end{block}
+
+    \column{0.55\textwidth}
+    \begin{block}{测试工具与维度}
+      \begin{itemize}
+        \item \textbf{功能测试}：Postman
+        \item \textbf{性能压测}：Hey (Golang)
+        \item \textbf{监控告警}：Grafana
+        \item \textbf{CI/CD}：腾讯智研平台
+      \end{itemize}
+    \end{block}
+  \end{columns}
+
+  \vspace{0.3cm}
+  \begin{center}
+    \begin{tikzpicture}
+      \foreach \i/\t in {0/功能测试, 2/性能测试, 4/稳定性测试, 6/兼容性测试} {
+        \node[rectangle, draw=ustcblue, fill=ustcblue!10, minimum width=1.8cm, minimum height=0.7cm, font=\small] at (\i,0) {\t};
+      }
+      \draw[->, thick, ustcgray] (-1.2,0) -- (-0.8,0);
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+% 第20页 · 功能测试结果
+\begin{frame}{功能测试结果}
+  \begin{center}
+    \begin{table}
+      \rowcolors{2}{ustcblue!5}{white}
+      \begin{tabular}{|c|c|c|c|}
+        \hline
+        \rowcolor{ustcblue!30}
+        \textbf{测试层级} & \textbf{测试用例数} & \textbf{通过率} & \textbf{结论} \\
+        \hline
+        API接入层 & 任务CRUD、权限、纠错 & \textcolor{green!60!black}{\textbf{100\%}} & 通过 \\
+        \hline
+        任务调度层 & 可用性检测、负载均衡、容错 & \textcolor{green!60!black}{\textbf{100\%}} & 通过 \\
+        \hline
+        任务执行层 & 参数传递、编辑、异常捕获 & \textcolor{green!60!black}{\textbf{100\%}} & 通过 \\
+        \hline
+      \end{tabular}
+    \end{table}
+  \end{center}
+
+  \begin{exampleblock}{结论}
+    三层架构下全部功能测试100\%通过，验证了分层解耦架构在复杂业务逻辑下的正确性。
+  \end{exampleblock}
+\end{frame}
+
+% 第21页 · 性能测试结果
+\begin{frame}{性能测试结果（压测数据）}
+  \begin{columns}[T]
+    \column{0.45\textwidth}
+    \begin{center}
+      \begin{table}
+        \rowcolors{2}{ustcblue!5}{white}
+        \begin{tabular}{|c|c|}
+          \hline
+          \rowcolor{ustcblue!30}
+          \textbf{并发数} & \textbf{平均响应} \\
+          \hline
+          10 & \textcolor{green!60!black}{< 14ms} \\
+          \hline
+          100 & \textcolor{green!60!black}{< 32ms} \\
+          \hline
+          1000 & \textcolor{green!60!black}{< 168ms} \\
+          \hline
+        \end{tabular}
+      \end{table}
+    \end{center}
+
+    \column{0.55\textwidth}
+    \begin{tikzpicture}[scale=0.9]
+      % Simple bar chart
+      \draw[->] (0,0) -- (0,4.5) node[left] {ms};
+      \draw[->] (0,0) -- (5.5,0) node[below] {并发数};
+
+      \foreach \x/\h/\v in {1/0.8/14, 2.5/1.8/32, 4/3.2/168} {
+        \fill[ustcblue!70] (\x-0.25,0) rectangle (\x+0.25,\h);
+        \node[font=\footnotesize] at (\x,\h+0.25) {\v};
+      }
+      \node[font=\footnotesize] at (1,-0.5) {10};
+      \node[font=\footnotesize] at (2.5,-0.5) {100};
+      \node[font=\footnotesize] at (4,-0.5) {1000};
+    \end{tikzpicture}
+  \end{columns}
+
+  \vspace{0.2cm}
+  \begin{center}
+    \textbf{1000并发下仍保持 <168ms 的低延迟响应，满足工业级性能要求}
+  \end{center}
+\end{frame}
+
+% 第22页 · 稳定性 & 兼容性测试
+\begin{frame}{稳定性与兼容性测试}
+  \begin{columns}[T]
+    \column{0.48\textwidth}
+    \begin{block}{稳定性测试 — 全部100\%通过}
+      \begin{itemize}
+        \item 关机重启后自动恢复
+        \item 断电故障数据不丢失
+        \item 网络中断自动重连
+        \item 多任务并发压力稳定
+        \item 磁盘空间满优雅降级
+      \end{itemize}
+    \end{block}
+
+    \column{0.48\textwidth}
+    \begin{block}{兼容性测试 — 全部100\%通过}
+      \begin{itemize}
+        \item \textbf{Linux} x86-64
+        \item \textbf{Linux} ARM64
+        \item \textbf{Windows} x86-64
+        \item \textbf{Windows} ARM64
+      \end{itemize}
+      \vspace{0.3cm}
+      全平台\ 全架构覆盖
+    \end{block}
+  \end{columns}
+
+  \vspace{0.3cm}
+  \begin{exampleblock}{容错机制}
+    系统采用\textbf{指数退避自愈策略}：故障自动检测 → 递增等待间隔重试 → 超限告警通知运维。
+  \end{exampleblock}
+\end{frame}
+
+% ============================================
+% 第六部分：总结与展望（3页）
+% ============================================
+\section{总结与展望}
+
+% 第23页 · 研究工作贡献总结
+\begin{frame}{研究工作贡献总结}
+  \begin{enumerate}
+    \item \textbf{攻克AI适配难题}
+    \begin{itemize}
+      \item 参数画像 + 异构数据映射，自动纠错与类型推断
+      \item 显著降低操作复杂度与数据处理门槛
+    \end{itemize}
+
+    \pause
+    \item \textbf{突破决策自动化瓶颈}
+    \begin{itemize}
+      \item 环境感知逻辑引擎，"条件-规则"模型
+      \item 消除人工干预，实现7×24小时自动调度
+    \end{itemize}
+
+    \pause
+    \item \textbf{解决资源互斥困境}
+    \begin{itemize}
+      \item 细粒度临界资源表 + 互斥智能检测
+      \item 从低效串行 → 安全高效并发调度
+    \end{itemize}
+
+    \pause
+    \item \textbf{完成工程验证}
+    \begin{itemize}
+      \item 腾讯TEG生产环境全面测试，月稳定支撑约200个AI任务
+    \end{itemize}
+  \end{enumerate}
+\end{frame}
+
+% 第24页 · 未来展望
+\begin{frame}{未来展望}
+  \begin{columns}[T]
+    \column{0.48\textwidth}
+    \begin{block}{方向一：适配更多临界资源}
+      \begin{itemize}
+        \item MCP服务互斥资源对接
+        \item 不局限于GPU硬件资源
+        \item 扩展至软件服务级别资源
+      \end{itemize}
+    \end{block}
+
+    \column{0.48\textwidth}
+    \begin{block}{方向二：AI智能数据报表}
+      \begin{itemize}
+        \item AI自动分析任务数据
+        \item 多视角智能报表生成
+        \item 节省沟通成本
+      \end{itemize}
+    \end{block}
+  \end{columns}
+
+  \vspace{0.5cm}
+  \begin{center}
+    \textbf{紧跟AI大模型技术发展趋势，持续演进优化}
+  \end{center}
+\end{frame}
+
+% 第25页 · 致谢 / 答辩结束
+\begin{frame}[plain]
+  \begin{center}
+    \vspace{1.5cm}
+    {\Huge\color{ustcblue} 感谢各位评委老师}
+
+    \vspace{1cm}
+    {\Large 请各位老师批评指正}
+
+    \vspace{2cm}
+    {\large Q \& A}
+  \end{center}
+\end{frame}
+
+% ============================================
+% 附录（备用页面）
+% ============================================
+\appendix
+\section*{附录}
+
+% A.1 技术栈总览
+\begin{frame}{附录A.1：技术栈总览}
+  \begin{center}
+    \begin{table}
+      \rowcolors{2}{ustcblue!5}{white}
+      \begin{tabular}{|c|l|l|}
+        \hline
+        \rowcolor{ustcblue!30}
+        \textbf{层次} & \textbf{技术选型} & \textbf{用途} \\
+        \hline
+        编程语言 & Python 3.10 & 主体开发 \\
+        \hline
+        Web框架 & FastAPI & API服务 \\
+        \hline
+        前端 & Vue.js & 管理后台 \\
+        \hline
+        任务队列 & Celery + Redis & 分布式调度 \\
+        \hline
+        RPC通信 & tRPC（腾讯自研） & 远程过程调用 \\
+        \hline
+        数据库 & PostgreSQL & 数据持久化 \\
+        \hline
+        ORM & SQLAlchemy + Alembic & 数据访问 \\
+        \hline
+        校验 & Pydantic & 数据校验与纠错 \\
+        \hline
+        鉴权 & OAuth2.0 + 自研微服务 & 权限管控 \\
+        \hline
+        容器化 & Docker + Kubernetes(TKE) & 部署运维 \\
+        \hline
+      \end{tabular}
+    \end{table}
+  \end{center}
+\end{frame}
+
+% A.2 任务状态机
+\begin{frame}{附录A.2：任务状态机}
+  \begin{center}
+    \begin{tikzpicture}[
+      state/.style={circle, draw=ustcblue, fill=ustcblue!10, minimum width=1.5cm, font=\small},
+      arrow/.style={->, thick, ustcblue},
+    ]
+
+    \node[state] (pending) at (0,0) {待执行};
+    \node[state] (check) at (3,0) {可用性检测};
+    \node[state] (queued) at (6,1.5) {排队中};
+    \node[state] (running) at (9,0) {执行中};
+    \node[state] (success) at (12,0) {成功};
+    \node[state] (failed) at (9,-2) {失败};
+    \node[state] (retry) at (6,-2) {重试};
+
+    \draw[arrow] (pending) -- (check);
+    \draw[arrow] (check) -- (queued) node[midway,above] {通过};
+    \draw[arrow] (queued) -- (running);
+    \draw[arrow] (running) -- (success) node[midway,above] {完成};
+    \draw[arrow] (running) -- (failed) node[midway,right] {异常};
+    \draw[arrow] (failed) -- (retry);
+    \draw[arrow,bend left] (retry) to (queued);
+
+    \node[font=\footnotesize,ustcgray] at (3,-1.5) {不通过则等待/拒绝};
+
+  \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+% A.3 数据同步机制
+\begin{frame}{附录A.3：Celery + Redis 数据同步机制}
+  \begin{center}
+    \begin{tikzpicture}[
+      box/.style={rectangle, draw, minimum width=2.5cm, minimum height=0.8cm, font=\small, align=center, rounded corners=3pt},
+      db/.style={cylinder, shape border rotate=90, draw, minimum width=1.5cm, minimum height=0.8cm, font=\small},
+    ]
+
+    \node[box,fill=ustcblue!15] (api) at (0,1.5) {FastAPI\\服务端};
+    \node[box,fill=ustclight!15] (redis) at (5,1.5) {Redis\\消息队列};
+    \node[box,fill=ustcblue!15] (celery) at (10,1.5) {Celery\\Worker};
+    \node[db,fill=ustcgray!10] (pg) at (13,1.5) {PG};
+
+    \draw[->, thick] (api) -- (redis) node[midway,above,font=\footnotesize] {发布任务};
+    \draw[->, thick] (redis) -- (celery) node[midway,above,font=\footnotesize] {消费任务};
+    \draw[->, thick] (celery) -- (pg) node[midway,above,font=\footnotesize] {持久化};
+
+    % feedback
+    \draw[->, thick, bend right, ustcgray] (celery.south) to node[midway,below,font=\footnotesize] {结果回写} (redis.south);
+
+  \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.3cm}
+  \begin{itemize}
+    \item API层将任务放入Redis队列，立即返回响应
+    \item Celery Workers异步消费任务，写入PostgreSQL
+    \item 解耦请求处理与任务执行，保障高并发下的系统稳定性
+  \end{itemize}
+\end{frame}
+
+% A.4 容错自愈策略
+\begin{frame}{附录A.4：指数退避自愈策略}
+  \begin{center}
+    \begin{tikzpicture}[scale=0.95]
+      \draw[->, thick] (0,0) -- (11,0) node[right] {重试次数};
+      \draw[->, thick] (0,0) -- (0,5) node[above] {等待间隔(s)};
+
+      \foreach \x/\v in {1.5/1, 3/2, 4.5/4, 6/8, 7.5/16, 9/32} {
+        \fill[ustcblue!70] (\x-0.2,0) rectangle (\x+0.2,\v/8);
+      }
+
+      \node[font=\footnotesize] at (1.5,-0.4) {1};
+      \node[font=\footnotesize] at (3,-0.4) {2};
+      \node[font=\footnotesize] at (4.5,-0.4) {3};
+      \node[font=\footnotesize] at (6,-0.4) {4};
+      \node[font=\footnotesize] at (7.5,-0.4) {5};
+      \node[font=\footnotesize] at (9,-0.4) {6+};
+
+      \draw[->, thick, red!70] (9.5,4.5) -- (9.5,1.5) node[midway,right,font=\footnotesize] {超限告警};
+    \end{tikzpicture}
+  \end{center}
+
+  \vspace{0.3cm}
+  \begin{enumerate}
+    \item 任务执行失败 → 等待 $2^{n-1}$ 秒后重试
+    \item 重试次数超过阈值 → 停止重试，推送告警通知
+    \item 确保系统不因单点故障陷入死循环
+  \end{enumerate}
+\end{frame}
+
+% A.5 主要参考文献
+\begin{frame}{附录A.5：主要参考文献}
+  \footnotesize
+  \begin{thebibliography}{99}
+
+  \bibitem{vaswani2017attention}
+    Vaswani A, et al.
+    \textit{Attention Is All You Need}.
+    NeurIPS, 2017.
+
+  \bibitem{radford2018improving}
+    Radford A, et al.
+    \textit{Improving Language Understanding by Generative Pre-Training}.
+    OpenAI, 2018.
+
+  \bibitem{devlin2019bert}
+    Devlin J, et al.
+    \textit{BERT: Pre-training of Deep Bidirectional Transformers}.
+    NAACL, 2019.
+
+  \bibitem{kilburn1961atlas}
+    Kilburn T, et al.
+    \textit{The Manchester University Atlas Operating System}.
+    The Computer Journal, 1961.
+
+  \bibitem{lamport2019time}
+    Lamport L.
+    \textit{Time, Clocks, and the Ordering of Events in a Distributed System}.
+    Communications of the ACM, 1978.
+
+  \end{thebibliography}
+
+  \vspace{0.3cm}
+  \begin{center}
+    \footnotesize 完整参考文献详见学位论文
+  \end{center}
+\end{frame}
+
+\end{document}

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280, height=720">
+<title>目录页 - 毕业答辩PPT模板</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1280px; height: 720px; overflow: hidden;
+    font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif;
+    background: #f5f7fa;
+    display: flex;
+  }
+
+  /* 左侧蓝色面板 */
+  .left-panel {
+    width: 380px; height: 100%;
+    background: linear-gradient(180deg, #003d7a 0%, #00264d 100%);
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    position: relative; overflow: hidden;
+  }
+  .left-panel::after {
+    content: ''; position: absolute;
+    right: -60px; top: 50%;
+    width: 120px; height: 120px;
+    border: 2px solid rgba(255,255,255,0.08);
+    border-radius: 50%;
+    transform: translateY(-50%);
+  }
+  .left-panel .chapter-num {
+    font-size: 120px; font-weight: 900;
+    color: rgba(255,255,255,0.08);
+    line-height: 1;
+  }
+  .left-panel .page-label {
+    color: rgba(255,255,255,0.9);
+    font-size: 28px; letter-spacing: 8px;
+    margin-top: 16px;
+    font-weight: 300;
+  }
+  .left-panel .en-label {
+    color: rgba(255,255,255,0.35);
+    font-size: 13px; letter-spacing: 3px;
+    margin-top: 8px;
+    text-transform: uppercase;
+  }
+  .left-panel .dec-line {
+    width: 40px; height: 2px;
+    background: rgba(255,255,255,0.3);
+    margin-top: 20px;
+  }
+
+  /* 右侧内容区 */
+  .right-panel {
+    flex: 1; padding: 70px 90px 70px 60px;
+    display: flex; flex-direction: column;
+    justify-content: center;
+  }
+  .toc-list {
+    list-style: none;
+  }
+  .toc-item {
+    display: flex; align-items: baseline;
+    padding: 18px 20px; margin-bottom: 6px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+  .toc-item:hover {
+    background: rgba(0,61,122,0.06);
+  }
+  .toc-num {
+    font-size: 28px; font-weight: 700;
+    color: #003d7a; min-width: 70px;
+    opacity: 0.7;
+  }
+  .toc-num.small {
+    font-size: 18px; font-weight: 600;
+    opacity: 0.5; color: #555;
+  }
+  .toc-content {
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .toc-title {
+    font-size: 20px; color: #1a1a2e;
+    font-weight: 500; letter-spacing: 1px;
+  }
+  .toc-subtitle {
+    font-size: 13px; color: #888;
+    letter-spacing: 1px;
+  }
+  .toc-dot {
+    flex: 1; border-bottom: 1px dotted #ccc;
+    margin: 0 16px; align-self: center;
+  }
+
+  /* 当前高亮 */
+  .toc-item.active {
+    background: rgba(0,61,122,0.08);
+  }
+  .toc-item.active .toc-title {
+    color: #003d7a; font-weight: 700;
+  }
+  .toc-item.active::before {
+    content: ''; position: absolute;
+    left: 0; top: 12px; bottom: 12px;
+    width: 3px; background: #003d7a;
+    border-radius: 2px;
+  }
+
+  /* 底部装饰 */
+  .bottom-bar {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 4px; background: linear-gradient(90deg, #003d7a, #5dade2);
+  }
+</style>
+</head>
+<body>
+  <div class="bottom-bar"></div>
+
+  <div class="left-panel">
+    <div class="chapter-num">目</div>
+    <div class="page-label">目 录</div>
+    <div class="en-label">CONTENTS</div>
+    <div class="dec-line"></div>
+  </div>
+
+  <div class="right-panel">
+    <ul class="toc-list">
+      <li class="toc-item">
+        <span class="toc-num">01</span>
+        <div class="toc-content">
+          <span class="toc-title">选题背景与意义</span>
+        </div>
+        <span class="toc-dot"></span>
+        <span class="toc-subtitle">研究动机</span>
+      </li>
+      <li class="toc-item active">
+        <span class="toc-num">02</span>
+        <div class="toc-content">
+          <span class="toc-title">相关技术简介</span>
+        </div>
+        <span class="toc-dot"></span>
+        <span class="toc-subtitle">技术基础</span>
+      </li>
+      <li class="toc-item">
+        <span class="toc-num">03</span>
+        <div class="toc-content">
+          <span class="toc-title">系统需求分析</span>
+        </div>
+        <span class="toc-dot"></span>
+        <span class="toc-subtitle">问题定义</span>
+      </li>
+      <li class="toc-item">
+        <span class="toc-num">04</span>
+        <div class="toc-content">
+          <span class="toc-title">系统概要设计</span>
+        </div>
+        <span class="toc-dot"></span>
+        <span class="toc-subtitle">架构方案</span>
+      </li>
+      <li class="toc-item">
+        <span class="toc-num">05</span>
+        <div class="toc-content">
+          <span class="toc-title">详细设计与实现</span>
+        </div>
+        <span class="toc-dot"></span>
+        <span class="toc-subtitle">核心实现</span>
+      </li>
+      <li class="toc-item">
+        <span class="toc-num">06</span>
+        <div class="toc-content">
+          <span class="toc-title">系统测试与分析</span>
+        </div>
+        <span class="toc-dot"></span>
+        <span class="toc-subtitle">实验验证</span>
+      </li>
+      <li class="toc-item">
+        <span class="toc-num">07</span>
+        <div class="toc-content">
+          <span class="toc-title">结论与展望</span>
+        </div>
+        <span class="toc-dot"></span>
+        <span class="toc-subtitle">总结规划</span>
+      </li>
+    </ul>
+  </div>
+</body>
+</html>
