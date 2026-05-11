@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999996 (TeX Live 2025/dev/Debian) (preloaded format=xelatex 2026.5.11)  11 MAY 2026 21:29
+This is XeTeX, Version 3.141592653-2.6-0.999996 (TeX Live 2025/dev/Debian) (preloaded format=xelatex 2026.5.11)  11 MAY 2026 21:52
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1161,19 +1161,19 @@ LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
  (./beamer.nav)
 File: ../paper_latex/figures/ustc-badge.pdf Graphic file (type pdf)
 <use ../paper_latex/figures/ustc-badge.pdf>
-LaTeX Font Info:    Trying to load font information for U+msa on input line 93.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 91.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 93.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 91.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Overfull \vbox (56.9915pt too high) detected at line 93
+Overfull \vbox (17.7842pt too high) detected at line 91
  []
 
 
@@ -1217,7 +1217,7 @@ Overfull \vbox (56.9915pt too high) detected at line 93
 [10
 
 ]
-Overfull \vbox (0.75214pt too high) detected at line 305
+Overfull \vbox (0.75214pt too high) detected at line 303
  []
 
 
@@ -1225,7 +1225,7 @@ Overfull \vbox (0.75214pt too high) detected at line 305
 [11
 
 ]
-Overfull \vbox (5.47337pt too high) detected at line 352
+Overfull \vbox (5.47337pt too high) detected at line 350
  []
 
 
@@ -1257,7 +1257,7 @@ Overfull \vbox (5.47337pt too high) detected at line 352
 [18
 
 ]
-Overfull \vbox (75.0414pt too high) detected at line 548
+Overfull \vbox (75.0414pt too high) detected at line 546
  []
 
 
@@ -1270,9 +1270,9 @@ Overfull \vbox (75.0414pt too high) detected at line 548
 
 ]
 LaTeX Font Info:    Font shape `TU/lmss/m/it' in size <10> not available
-(Font)              Font shape `TU/lmss/m/sl' tried instead on input line 610.
+(Font)              Font shape `TU/lmss/m/sl' tried instead on input line 608.
 
-Overfull \vbox (9.64009pt too high) detected at line 610
+Overfull \vbox (9.64009pt too high) detected at line 608
  []
 
 
@@ -1280,7 +1280,7 @@ Overfull \vbox (9.64009pt too high) detected at line 610
 [21
 
 ]
-Overfull \vbox (45.8775pt too high) detected at line 640
+Overfull \vbox (45.8775pt too high) detected at line 638
  []
 
 
@@ -1288,7 +1288,7 @@ Overfull \vbox (45.8775pt too high) detected at line 640
 [22
 
 ]
-Overfull \hbox (56.44301pt too wide) in paragraph at lines 682--682
+Overfull \hbox (56.44301pt too wide) in paragraph at lines 680--680
  [] 
  []
 
@@ -1309,7 +1309,7 @@ Overfull \hbox (56.44301pt too wide) in paragraph at lines 682--682
 [26
 
 ]
-Overfull \hbox (8.47375pt too wide) in paragraph at lines 842--842
+Overfull \hbox (8.47375pt too wide) in paragraph at lines 840--840
 [][]  
  []
 
@@ -1350,7 +1350,7 @@ Overfull \hbox (8.47375pt too wide) in paragraph at lines 842--842
 [35
 
 ]
-Overfull \vbox (21.45497pt too high) detected at line 1128
+Overfull \vbox (21.45497pt too high) detected at line 1126
  []
 
 
@@ -1363,7 +1363,7 @@ File: beamericonarticle.pdf Graphic file (type pdf)
 File: beamericonarticle.pdf Graphic file (type pdf)
 <use beamericonarticle.pdf>
 LaTeX Font Info:    Font shape `TU/lmss/m/it' in size <9> not available
-(Font)              Font shape `TU/lmss/m/sl' tried instead on input line 1166.
+(Font)              Font shape `TU/lmss/m/sl' tried instead on input line 1164.
 
 File: beamericonarticle.pdf Graphic file (type pdf)
 <use beamericonarticle.pdf>
