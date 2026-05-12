@@ -23,4 +23,4 @@ echo "========================================"
 echo ""
 
 # 清理辅助文件 (可选，取消下面注释以启用)
-# rm -f "$MAIN".aux "$MAIN".log "$MAIN".nav "$MAIN".out "$MAIN".snm "$MAIN".toc "$MAIN".vrb 2>/dev/null
+rm -f "$MAIN".aux "$MAIN".log "$MAIN".nav "$MAIN".out "$MAIN".snm "$MAIN".toc "$MAIN".vrb 2>/dev/null
