@@ -517,32 +517,44 @@
 \end{frame}
 
 % 第14.5页 · 创新二（核心公式）
-\begin{frame}{创新二：逻辑引擎的形式化定义}
-  \begin{block}{条件算子（Condition）}
-    逻辑判定的最小原子单元，映射关系：
+\begin{frame}{逻辑引擎的形式化定义 —— 条件算子}
+  \begin{block}{Condition：逻辑判定的最小原子单元}
     \[
-    C = \{Code, Params\} \rightarrow f_{\text{logic}}(Env, Params)
+    C = \{Code, Params\} \rightarrow f_{\mathrm{logic}}(Env, Params)
     \]
-    \begin{itemize}
-      \footnotesize
-      \item $Code$：唯一标识底层判断逻辑（如时间范围、负载阈值）
-      \item $Params$：运行时参数，赋予同一逻辑适配不同场景的灵活性
-      \item $Env$：实时采集的内外部环境状态
-    \end{itemize}
   \end{block}
 
-  \begin{block}{规则算子（Rule）}
-    原子条件经逻辑算子嵌套组合而成：
+  \vspace{0.3cm}
+  \begin{itemize}
+    \item \textbf{$Code$}：唯一标识底层判断逻辑（如时间范围、负载阈值）
+    \item \textbf{$Params$}：运行时参数，赋予同一逻辑适配不同场景的灵活性
+    \item \textbf{$Env$}：实时采集的内外部环境状态（系统负载、运营策略等）
+  \end{itemize}
+
+  \vspace{0.5cm}
+  \begin{exampleblock}{关键设计}
+    同一 $Code$ 搭配不同 $Params$ 可适配多种判段场景，无需修改核心代码。
+  \end{exampleblock}
+\end{frame}
+
+\begin{frame}{逻辑引擎的形式化定义 —— 规则算子}
+  \begin{block}{Rule：原子条件经逻辑算子嵌套组合}
     \[
     Rule = \bigvee_{i=1}^{n} \left( \bigwedge_{j=1}^{m} Condition_{i,j} \right)
     \]
-    \begin{itemize}
-      \footnotesize
-      \item 一级数组元素间执行\textbf{"或（OR）"}逻辑
-      \item 二级数组元素间执行\textbf{"且（AND）"}逻辑
-      \item 支持"场景策略注入"：节假日、封网期间自动调整准入规则
-    \end{itemize}
   \end{block}
+
+  \vspace{0.3cm}
+  \begin{itemize}
+    \item 一级数组元素间执行\textbf{「或（OR）」}逻辑
+    \item 二级数组元素间执行\textbf{「且（AND）」}逻辑
+    \item 支持\textbf{「场景策略注入」}：节假日、封网期间自动切换准入规则
+  \end{itemize}
+
+  \vspace{0.4cm}
+  \begin{exampleblock}{设计优势}
+    配置化驱动，管理员修订策略文件即可变更调度逻辑，无需改动一行代码。
+  \end{exampleblock}
 \end{frame}
 
 % 第15页 · 创新二（效果）
