@@ -1,6 +1,0 @@
-\beamer@sectionintoc {1}{研究背景与意义}{3}{0}{1}
-\beamer@sectionintoc {2}{国内外研究现状}{6}{0}{2}
-\beamer@sectionintoc {3}{系统整体设计}{9}{0}{3}
-\beamer@sectionintoc {4}{关键技术创新}{14}{0}{4}
-\beamer@sectionintoc {5}{系统测试与分析}{24}{0}{5}
-\beamer@sectionintoc {6}{总结与展望}{29}{0}{6}
