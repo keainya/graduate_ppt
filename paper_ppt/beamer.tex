@@ -590,33 +590,18 @@
     GPU等AI临界资源存在互斥冲突，传统调度方案只能\textbf{保守串行执行}，资源利用率低。
   \end{alertblock}
 
-  \begin{exampleblock}{解决方案}
-    \textbf{细粒度"临界资源表" + 互斥智能检测}
+  \begin{exampleblock}{解决方案：细粒度"临界资源表" + 互斥智能检测}
     \begin{enumerate}
       \item \textbf{资源注册}：任务需在定义阶段声明所需临界资源清单
       \item \textbf{状态探测}：实时扫描资源占用表，检测 is\_delete 标识
       \item \textbf{并发决策}：无冲突$\rightarrow$并发执行；有冲突$\rightarrow$延迟重试
     \end{enumerate}
+    \begin{center}
+      \small
+      资源占用表：\textit{task\_id} + \textit{resource\_id} + \textit{is\_delete} $\longrightarrow$ 实时快照\\[2pt]
+      冲突场景（同一GPU）$\rightarrow$\textbf{串行排队} \quad|\quad 无冲突场景（不同GPU）$\rightarrow$\textbf{安全并发}
+    \end{center}
   \end{exampleblock}
-
-  \vspace{0.2cm}
-  \begin{center}
-    \small
-    资源占用表：\textit{task\_id} + \textit{resource\_id} + \textit{is\_delete} $\longrightarrow$ 实时快照
-  \end{center}
-
-  \vspace{0.2cm}
-  \begin{columns}[T]
-    \column{0.48\textwidth}
-    \begin{block}{冲突场景}
-      同一GPU\#1上多个推理任务$\rightarrow$\textbf{串行排队}
-    \end{block}
-
-    \column{0.48\textwidth}
-    \begin{block}{无冲突场景}
-      不同GPU\#1/\#2上独立任务$\rightarrow$\textbf{安全并发}
-    \end{block}
-  \end{columns}
 \end{frame}
 
 % 第17页 · 创新三（效果）
@@ -653,18 +638,18 @@
 \begin{frame}{系统总体工作流程}
   \begin{center}
     \begin{tikzpicture}[
-      block/.style={rectangle, draw=ustcblue, fill=ustcblue!10, minimum width=2.2cm,
-                    minimum height=0.8cm, rounded corners=3pt, font=\small, align=center},
+      block/.style={rectangle, draw=ustcblue, fill=ustcblue!10, minimum width=1.5cm,
+                    minimum height=0.7cm, rounded corners=3pt, font=\footnotesize, align=center},
       arrow/.style={->, thick, ustcblue},
     ]
 
     \node[block] (submit) at (0,2) {任务提交};
-    \node[block] (verify) at (2.5,2) {参数纠错};
-    \node[block] (avail) at (5,2) {可用性检测};
-    \node[block] (mutex) at (7.5,2) {互斥分析};
-    \node[block] (balance) at (10,2) {负载分配};
-    \node[block] (exec) at (12.5,2) {并发执行};
-    \node[block] (result) at (15,2) {结果回传};
+    \node[block] (verify) at (1.8,2) {参数纠错};
+    \node[block] (avail) at (3.6,2) {可用性\\检测};
+    \node[block] (mutex) at (5.4,2) {互斥分析};
+    \node[block] (balance) at (7.2,2) {负载分配};
+    \node[block] (exec) at (9.0,2) {并发执行};
+    \node[block] (result) at (10.8,2) {结果回传};
 
     \draw[arrow] (submit) -- (verify);
     \draw[arrow] (verify) -- (avail);
@@ -674,17 +659,17 @@
     \draw[arrow] (exec) -- (result);
 
     % Layer labels
-    \node[font=\footnotesize,ustcgray] at (1.25,3.2) {API接入层};
-    \node[font=\footnotesize,ustcgray] at (7.5,3.2) {任务调度层};
-    \node[font=\footnotesize,ustcgray] at (13.75,3.2) {任务执行层};
+    \node[font=\footnotesize,ustcgray] at (0.9,3.1) {API接入层};
+    \node[font=\footnotesize,ustcgray] at (5.4,3.1) {任务调度层};
+    \node[font=\footnotesize,ustcgray] at (9.9,3.1) {任务执行层};
 
-    \draw[ustcgray!50, dashed] (3.75,3) -- (3.75,0.5);
-    \draw[ustcgray!50, dashed] (11.25,3) -- (11.25,0.5);
+    \draw[ustcgray!50, dashed] (2.7,2.9) -- (2.7,0.8);
+    \draw[ustcgray!50, dashed] (8.1,2.9) -- (8.1,0.8);
 
   \end{tikzpicture}
   \end{center}
 
-  \vspace{0.3cm}
+  \vspace{0.2cm}
   \begin{center}
     \footnotesize
     三层协同：任务提交 $\to$ 参数纠错 $\to$ 可用性检测 $\to$ 互斥分析 $\to$ 负载分配 $\to$ 并发执行 $\to$ 结果回传
@@ -692,11 +677,11 @@
 \end{frame}
 
 % ============================================
-% 第五部分：系统测试与分析（4页）
+% 第五部分：系统测试与分析（6页）
 % ============================================
 \section{系统测试与分析}
 
-% 第19页 · 测试环境与方法
+% 第20页 · 测试环境与方法
 \begin{frame}{测试环境与方法}
   \begin{columns}[T]
     \column{0.55\textwidth}
@@ -708,9 +693,7 @@
           \rowcolor{ustcblue!30}
           \textbf{配置项} & \textbf{规格} \\
           \hline
-          K8s集群 & 3节点（1M + 2W）\\
-          \hline
-          K8s版本 & TKE 1.28.0 \\
+          K8s集群 & 3节点分布式集群，基于TKE \\
           \hline
           数据库 & PostgreSQL + Redis \\
           \hline
@@ -728,6 +711,7 @@
         \item CPU: i9-13900K @ 3.0GHz
         \item 内存: 64GB DDR5 5600MHz
         \item GPU: RTX 4090 (24GB)
+        \item OS: Debian / Python 3.10 / Docker
       \end{itemize}
     \end{block}
   \end{columns}
@@ -762,7 +746,7 @@
   \end{block}
 \end{frame}
 
-% 第20页 · 功能测试结果
+% 第21页 · 功能测试结果
 \begin{frame}{功能测试结果}
   \begin{center}
     \begin{table}
@@ -799,12 +783,12 @@
     \column{0.33\textwidth}
     \begin{block}{任务执行层}
       \footnotesize
-      参数传递、撤销重启、指标监测、异常上报
+      参数传递、撤销重启、指标监测、异常预测预警
     \end{block}
   \end{columns}
 \end{frame}
 
-% 第21页 · 性能测试结果
+% 第22页 · 性能测试结果
 \begin{frame}{性能测试结果（Hey压测数据）}
   \begin{columns}[T]
     \column{0.52\textwidth}
@@ -847,11 +831,11 @@
 
   \vspace{0.15cm}
   \begin{exampleblock}{结论}
-    全部压测项远低于预设阈值（500ms），工具：\textbf{Hey (Golang)}
+    全部压测项远低于预设阈值（500ms），平均延迟约155ms@1000并发，压测工具：\textbf{Hey (Golang)}
   \end{exampleblock}
 \end{frame}
 
-% 第22页 · 稳定性 & 兼容性测试
+% 第23页 · 稳定性 & 兼容性测试
 \begin{frame}{稳定性与兼容性测试}
   \begin{columns}[T]
     \column{0.48\textwidth}
@@ -905,12 +889,67 @@
   \end{exampleblock}
 \end{frame}
 
+% 第23.5页 · 与Apache Airflow横向对比 — 性能
+\begin{frame}{与Apache Airflow横向对比（一）—— 性能}
+  \vspace{0.2cm}
+  \begin{center}
+    \begin{table}
+      \rowcolors{2}{ustcblue!5}{white}
+      \begin{tabular}{|p{3cm}|c|c|}
+        \hline
+        \rowcolor{ustcblue!30}
+        \textbf{对比维度} & \textbf{本系统} & \textbf{Apache Airflow} \\
+        \hline
+        1000并发平均延迟 & \textcolor{green!60!black}{\textbf{$\sim$155ms}} & $>$1000ms \\
+        \hline
+        触发机制 & \textbf{事件驱动实时触发} & DAG周期性轮询 \\
+        \hline
+        任务下发时延 & \textbf{毫秒级} & 秒级$\sim$分钟级 \\
+        \hline
+      \end{tabular}
+    \end{table}
+  \end{center}
+
+  \begin{exampleblock}{性能结论}
+    本系统1000并发下平均延迟$\sim$155ms，远优于Airflow（$>$1000ms）；事件驱动机制实现毫秒级任务下发。
+  \end{exampleblock}
+\end{frame}
+
+% 第23.6页 · 与Apache Airflow横向对比 — 功能
+\begin{frame}{与Apache Airflow横向对比（二）—— 功能}
+  \vspace{0.2cm}
+  \begin{center}
+    \begin{table}
+      \rowcolors{2}{ustcblue!5}{white}
+      \begin{tabular}{|p{3cm}|c|c|}
+        \hline
+        \rowcolor{ustcblue!30}
+        \textbf{能力维度} & \textbf{本系统} & \textbf{Apache Airflow} \\
+        \hline
+        异构数据自动纠偏 & \checkmark & $\times$ \\
+        \hline
+        环境感知与自主决策 & \checkmark & $\times$ \\
+        \hline
+        GPU资源互斥识别 & \checkmark & $\times$ \\
+        \hline
+        异常自愈干预 & \checkmark & $\times$ \\
+        \hline
+      \end{tabular}
+    \end{table}
+  \end{center}
+
+  \vspace{0.2cm}
+  \begin{exampleblock}{对比结论}
+    本系统在AI多任务场景下的性能与功能全面超越主流开源方案 Apache Airflow。
+  \end{exampleblock}
+\end{frame}
+
 % ============================================
 % 第六部分：总结与展望（3页）
 % ============================================
 \section{总结与展望}
 
-% 第23页 · 研究工作贡献总结
+% 第24页 · 研究工作贡献总结
 \begin{frame}{研究工作贡献总结}
   \begin{enumerate}
     \item \textbf{攻克AI适配难题}
@@ -938,35 +977,61 @@
   \end{enumerate}
 \end{frame}
 
-% 第24页 · 未来展望
-\begin{frame}{未来展望}
+% 第25页 · 现有不足与未来展望
+\begin{frame}{现有不足与未来展望}
   \begin{columns}[T]
-    \column{0.48\textwidth}
-    \begin{block}{方向一：适配更多临界资源}
-      \begin{itemize}
-        \item MCP服务互斥资源对接
-        \item 不局限于GPU硬件资源
-        \item 扩展至软件服务级别资源
-      \end{itemize}
+    \column{0.42\textwidth}
+    \begin{block}{现有不足}
+      \begin{table}
+        \rowcolors{2}{ustcblue!5}{white}
+        \footnotesize
+        \begin{tabular}{|p{1.8cm}|p{2.6cm}|}
+          \hline
+          \rowcolor{ustcblue!30}
+          \textbf{不足项} & \textbf{说明} \\
+          \hline
+          调度策略自适应 & 依赖人工配置规则，未引入自学习 \\
+          \hline
+          资源互斥覆盖 & 聚焦GPU硬件，软件级资源覆盖不足 \\
+          \hline
+          DAG工作流编排 & 缺乏原生引擎，复杂依赖支持有限 \\
+          \hline
+          负载均衡精细度 & 静态权重，未融合实时负载指标 \\
+          \hline
+          异常根因分析 & 缺乏智能摘要与关联分析能力 \\
+          \hline
+        \end{tabular}
+      \end{table}
     \end{block}
 
-    \column{0.48\textwidth}
-    \begin{block}{方向二：AI智能数据报表}
-      \begin{itemize}
-        \item AI自动分析任务数据
-        \item 多视角智能报表生成
-        \item 节省沟通成本
-      \end{itemize}
+    \column{0.55\textwidth}
+    \begin{block}{未来展望}
+      \begin{enumerate}
+        \item \textbf{分布式大模型弹性调度}
+        \begin{itemize}
+          \item 引入网络带宽、RDMA链路画像
+        \end{itemize}
+        \item \textbf{多模态任务流智能编排}
+        \begin{itemize}
+          \item 扩展DAG工作流引擎
+        \end{itemize}
+        \item \textbf{MCP服务与软件级临界资源集成}
+        \item \textbf{强化学习自适应调度策略}
+        \begin{itemize}
+          \item 从"规则驱动"向"策略自治"演进
+        \end{itemize}
+        \item \textbf{AIOps智能运维与根因分析}
+      \end{enumerate}
     \end{block}
   \end{columns}
 
-  \vspace{0.5cm}
+  \vspace{0.2cm}
   \begin{center}
     \textbf{紧跟AI大模型技术发展趋势，持续演进优化}
   \end{center}
 \end{frame}
 
-% 第25页 · 致谢 / 答辩结束
+% 第26页 · 致谢 / 答辩结束
 \begin{frame}[plain]
   \begin{center}
     \vspace{1.5cm}
